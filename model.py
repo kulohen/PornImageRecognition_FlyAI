@@ -38,7 +38,6 @@ class Model(Base):
             data = self.model.predict(self.dataset.predict_data(**data))
             data = self.dataset.to_categorys(data)
             labels.append(data)
-
         return labels
 
     '''

@@ -185,7 +185,7 @@ for epoch in range(train_epoch):
 
         '''
         train_batch_List = [
-            100, 100, 100, 100
+            24, 24, 24, 24,24
         ]
 
     dataset_wangyi.set_Batch_Size(train_batch_List, val_batch_size)
@@ -196,7 +196,7 @@ for epoch in range(train_epoch):
     3/ 保存最佳模型model
     '''
     # save best acc
-    if history_train.history['val_acc'][0] > 0.50 and \
+    if history_train.history['val_acc'][0] > 0.00 and \
             round(best_score_by_loss, 2) >= round(history_train.history['val_loss'][0], 2):
         # if history_train.history['acc'][0] > 0.6 and \
         #         round(best_score_by_acc, 2) <= round(history_train.history['val_acc'][0], 2):
