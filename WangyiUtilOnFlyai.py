@@ -202,6 +202,13 @@ def get_sliceCSVbyClassify_V3(label='label',classify_count=3, split=0.8):
     try:
         source_csv=readCustomCsv_V3('train.csv', 'test.csv')
         print('train.csv , test.csv 读取成功')
+        # step 1 : csv to dataframe
+        dataframe_train = pd.DataFrame(data=source_csv.c.data)
+        dataframe_test = pd.DataFrame(data=source_csv.c.val)
+
+        # train and test merge one, and split by myself
+        tmp_a = pd.concat([dataframe_train, dataframe_test], axis=0)
+        tmp_b = tmp_a.sample(frac=1)
     except:
         print('train.csv , test.csv 读取失败')
         source_csv = None
@@ -210,17 +217,14 @@ def get_sliceCSVbyClassify_V3(label='label',classify_count=3, split=0.8):
         try:
             source_csv = readCustomCsv_V3('dev.csv', 'dev.csv')
             print('dev.csv 读取成功')
+            # step 1 : csv to dataframe
+            tmp_a = pd.DataFrame(data=source_csv.c.data)
+            tmp_b = tmp_a.sample(frac=1)
         except:
             print('train.csv,test.csv,dev.csv 都读取失败')
 
 
-    # step 1 : csv to dataframe
-    dataframe_train = pd.DataFrame(data=source_csv.c.data)
-    dataframe_test = pd.DataFrame(data=source_csv.c.val)
 
-    # train and test merge one, and split by myself
-    tmp_a = pd.concat([dataframe_train,dataframe_test],axis=0)
-    tmp_b = tmp_a.sample(frac=1)
 
     # step 2 : 筛选 csv
 
