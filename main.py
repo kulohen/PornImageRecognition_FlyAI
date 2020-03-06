@@ -51,11 +51,11 @@ args = parser.parse_args()
 
 num_classes = 5
 val_batch_size = {
-    0: 65,
-    1: 35,
-    2: 33,
-    3: 67,
-    4: 30
+    0: 100,
+    1: 100,
+    2: 100,
+    3: 100,
+    4: 100
 }
 train_epoch = args.EPOCHS
 history_train = 0
@@ -64,7 +64,7 @@ best_score_by_acc = 0.
 best_score_by_loss = 999.
 lr_level = 0
 # 训练集的每类的batch的量，组成的list
-train_batch_List = [20] * num_classes
+train_batch_List = [24] * num_classes
 
 '''
 flyai库中的提供的数据处理方法
@@ -196,7 +196,7 @@ for epoch in range(train_epoch):
     3/ 保存最佳模型model
     '''
     # save best acc
-    if history_train.history['val_acc'][0] > 0.00 and \
+    if history_train.history['val_acc'][0] > 0.80 and \
             round(best_score_by_loss, 2) >= round(history_train.history['val_loss'][0], 2):
         # if history_train.history['acc'][0] > 0.6 and \
         #         round(best_score_by_acc, 2) <= round(history_train.history['val_acc'][0], 2):
@@ -245,6 +245,9 @@ for epoch in range(train_epoch):
     plt.legend(loc="lower left")
     plt.savefig(args["plot"])
     '''
-
-print('best_score_by_acc :%.4f' % best_score_by_acc)
-print('best_score_by_loss :%.4f' % best_score_by_loss)
+if os.path.exists(model_path):
+    print('best_score_by_acc :%.4f' % best_score_by_acc)
+    print('best_score_by_loss :%.4f' % best_score_by_loss)
+else:
+    print('未达到save best acc的条件，已保存最后一次运行的model')
+    model.save_model(model=model_cnn.model_cnn, path=MODEL_PATH, overwrite=True)
