@@ -51,11 +51,11 @@ args = parser.parse_args()
 
 num_classes = 5
 val_batch_size = {
-    0: 105,
-    1: 99,
-    2: 95,
-    3: 103,
-    4: 98
+    0: 210,
+    1: 198,
+    2: 191,
+    3: 206,
+    4: 195
 }
 train_epoch = args.EPOCHS
 history_train = 0
@@ -64,7 +64,7 @@ best_score_by_acc = 0.
 best_score_by_loss = 999.
 lr_level = 0
 # 训练集的每类的batch的量，组成的list
-train_batch_List = [args.BATCH] * num_classes
+train_batch_List = [args.BATCH * 3 ] * num_classes
 
 '''
 flyai库中的提供的数据处理方法
@@ -129,7 +129,7 @@ for epoch in range(train_epoch):
     # 打印步骤和训练集/测试集的量
     cur_step = str(epoch + 1) + "/" + str(train_epoch)
     print()
-    print('■' + cur_step, ': %d on train, %d on val' % (len(x_3), len(x_4)))
+    print('■' + cur_step, ':train %d,val %d ' % (len(x_3), len(x_4)))
     '''
     2/ 训练train，验证val
     '''
@@ -166,7 +166,7 @@ for epoch in range(train_epoch):
         )
 
         # 不打印了，显示的界面篇幅有限
-        print('类%d __ loss :%.4f , acc :%.4f' % (iters, history_test[0], history_test[1]))
+        print('类%d loss:%.4f,acc:%.4f' % (iters, history_test[0], history_test[1]))
         sum_loss += history_test[0] * val_batch_size[iters]
         sum_acc += history_test[1] * val_batch_size[iters]
         '''
