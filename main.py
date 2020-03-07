@@ -64,7 +64,7 @@ best_score_by_acc = 0.
 best_score_by_loss = 999.
 lr_level = 0
 # 训练集的每类的batch的量，组成的list
-train_batch_List = [30] * num_classes
+train_batch_List = [args.BATCH] * num_classes
 
 '''
 flyai库中的提供的数据处理方法
@@ -105,7 +105,7 @@ model_cnn.model_cnn.compile(loss='categorical_crossentropy',
 print('keras model,compile, 耗时：%.1f 秒' % (clock() - time_0))
 
 for epoch in range(train_epoch):
-
+    time_1 = clock()
     '''
     1/ 获取batch数据
     '''
@@ -252,6 +252,8 @@ for epoch in range(train_epoch):
     plt.legend(loc="lower left")
     plt.savefig(args["plot"])
     '''
+    print('耗时：%.1f 秒' % (clock() - time_1))
+
 if os.path.exists(model_path):
     print('best_score_by_acc :%.4f' % best_score_by_acc)
     print('best_score_by_loss :%.4f' % best_score_by_loss)
