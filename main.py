@@ -46,13 +46,13 @@ Keras模版项目下载： https://www.flyai.com/python/keras_template.zip
 项目的超参
 '''
 parser = argparse.ArgumentParser()
-parser.add_argument("-e", "--EPOCHS", default=10, type=int, help="train epochs")
-parser.add_argument("-b", "--BATCH", default=20, type=int, help="batch size")
+parser.add_argument("-e", "--EPOCHS", default=300, type=int, help="train epochs")
+parser.add_argument("-b", "--BATCH", default=32, type=int, help="batch size")
 args = parser.parse_args()
 
 num_classes = 5
 # 训练集的每类的batch的量，组成的list
-train_batch_List = [args.BATCH * 3 ] * num_classes
+train_batch_List = [args.BATCH * 2 ] * num_classes
 # 验证集的batch量，模拟预测集
 val_batch_size = {
     0: 210,
@@ -128,7 +128,7 @@ for epoch in range(train_epoch):
         width_shift_range=0.1,
         height_shift_range=0.1,
         # shear_range=0.1,
-        zoom_range=0.2,
+        zoom_range=0.1,
         horizontal_flip=True,
         vertical_flip=False
     )
