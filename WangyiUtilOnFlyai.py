@@ -258,7 +258,7 @@ def getDatasetListByClassfy_V4(classify_count=3):
     list_tmp=[]
     for epoch in range(classify_count):
         time_0 = clock()
-        dataset = Lib(source=readCustomCsv_V3(xx[epoch], yy[epoch]), epochs=1)
+        dataset = Lib(source=readCustomCsv_V3(xx[epoch], yy[epoch]), epochs=10)
         list_tmp.append(dataset)
         # print('class-',epoch,' 的flyai dataset 建立成功')
         print('class-', epoch, ' 的flyai dataset 建立成功, 耗时：%.1f 秒' % (clock() - time_0), '; train_length:',

@@ -45,17 +45,17 @@ Keras模版项目下载： https://www.flyai.com/python/keras_template.zip
 项目的超参
 '''
 parser = argparse.ArgumentParser()
-parser.add_argument("-e", "--EPOCHS", default=300, type=int, help="train epochs")
-parser.add_argument("-b", "--BATCH", default=24, type=int, help="batch size")
+parser.add_argument("-e", "--EPOCHS", default=10, type=int, help="train epochs")
+parser.add_argument("-b", "--BATCH", default=30, type=int, help="batch size")
 args = parser.parse_args()
 
 num_classes = 5
 val_batch_size = {
-    0: 100,
-    1: 100,
-    2: 100,
-    3: 100,
-    4: 100
+    0: 105,
+    1: 99,
+    2: 95,
+    3: 103,
+    4: 98
 }
 train_epoch = args.EPOCHS
 history_train = 0
@@ -64,7 +64,7 @@ best_score_by_acc = 0.
 best_score_by_loss = 999.
 lr_level = 0
 # 训练集的每类的batch的量，组成的list
-train_batch_List = [24] * num_classes
+train_batch_List = [30] * num_classes
 
 '''
 flyai库中的提供的数据处理方法
@@ -128,7 +128,8 @@ for epoch in range(train_epoch):
     data_iter_train = datagen.flow(x_3, y_3, batch_size=args.BATCH, save_to_dir=None)
     # 打印步骤和训练集/测试集的量
     cur_step = str(epoch + 1) + "/" + str(train_epoch)
-    print('\n步骤' + cur_step, ': %d on train, %d on val' % (len(x_3), len(x_4)))
+    print()
+    print('■' + cur_step, ': %d on train, %d on val' % (len(x_3), len(x_4)))
     '''
     2/ 训练train，验证val
     '''
@@ -137,7 +138,7 @@ for epoch in range(train_epoch):
     #                               )
     # print('np.sum(train_batch_List :',np.sum(train_batch_List))
     for_fit_generator_train_steps = int(np.sum(train_batch_List, axis=0) * 2 / args.BATCH)
-    print('该epoch的fit_generator steps是 ', for_fit_generator_train_steps)
+    print('该fit_generator量:', for_fit_generator_train_steps)
     history_train = model_cnn.model_cnn.fit_generator(
         generator=data_iter_train,
         steps_per_epoch=for_fit_generator_train_steps,
@@ -165,7 +166,7 @@ for epoch in range(train_epoch):
         )
 
         # 不打印了，显示的界面篇幅有限
-        print('class-%d __ loss :%.4f , acc :%.4f' % (iters, history_test[0], history_test[1]))
+        print('类%d __ loss :%.4f , acc :%.4f' % (iters, history_test[0], history_test[1]))
         sum_loss += history_test[0] * val_batch_size[iters]
         sum_acc += history_test[1] * val_batch_size[iters]
         '''
@@ -184,13 +185,15 @@ for epoch in range(train_epoch):
             train_batch_List[iters] = next_train_batch_size
 
         '''
-        train_batch_List = [
-            24, 24, 24, 24,24
-        ]
+        # train_batch_List = [
+        #     24, 24, 24, 24,24
+        # ]
 
     dataset_wangyi.set_Batch_Size(train_batch_List, val_batch_size)
     # sum_loss =sum_loss / np.sum(train_batch_List, axis = 0)
     # sum_acc = sum_acc / np.sum(train_batch_List, axis=0)
+
+
 
     '''
     3/ 保存最佳模型model
@@ -205,6 +208,10 @@ for epoch in range(train_epoch):
         best_score_by_loss = history_train.history['val_loss'][0]
         print('【保存】了最佳模型by val_loss : %.4f' % best_score_by_loss)
 
+    if best_score_by_acc == 0 :
+        print('未能满足best_score的条件')
+    else:
+        print('当前best_score_acc :%.4f' % best_score_by_acc)
     # 调用系统打印日志函数，这样在线上可看到训练和校验准确率和损失的实时变化曲线
     # train_log(train_loss=history_train.history['loss'][0], train_acc=history_train.history['acc'][0], val_loss=history_train.history['val_loss'][0], val_acc=history_train.history['val_acc'][0])
 

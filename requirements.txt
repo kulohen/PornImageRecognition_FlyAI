@@ -1,4 +1,4 @@
-flyai==0.6.3
+flyai
 numpy
 opencv-python
 matplotlib
