@@ -4,6 +4,7 @@ Created on Mon Oct 30 19:44:02 2017
 @author: user
 """
 
+import datetime
 import psutil
 import os
 import argparse
@@ -50,6 +51,9 @@ parser.add_argument("-b", "--BATCH", default=20, type=int, help="batch size")
 args = parser.parse_args()
 
 num_classes = 5
+# 训练集的每类的batch的量，组成的list
+train_batch_List = [args.BATCH * 3 ] * num_classes
+# 验证集的batch量，模拟预测集
 val_batch_size = {
     0: 210,
     1: 198,
@@ -57,14 +61,18 @@ val_batch_size = {
     3: 206,
     4: 195
 }
+#TODO 合并并且重新分割train-set和val的比例
+
+#是否开启每一类的验证,True代表开启（影响速率）
+val_per_class = False
+
 train_epoch = args.EPOCHS
 history_train = 0
 history_test = 0
 best_score_by_acc = 0.
 best_score_by_loss = 999.
 lr_level = 0
-# 训练集的每类的batch的量，组成的list
-train_batch_List = [args.BATCH * 3 ] * num_classes
+
 
 '''
 flyai库中的提供的数据处理方法
@@ -152,46 +160,50 @@ for epoch in range(train_epoch):
     # 内存超90%重置keras model，防止内存泄露
     model_cnn.cleanMemory()
 
-    sum_loss = 0
-    sum_acc = 0
-    for iters in range(num_classes):
-        if dataset_wangyi.dataset_slice[iters].get_train_length() == 0 or dataset_wangyi.dataset_slice[
-            iters].get_validation_length() == 0:
-            continue
-        history_test = model_cnn.model_cnn.evaluate(
-            x=x_5[iters],
-            y=y_5[iters],
-            batch_size=None,
-            verbose=2
-        )
+    '''
+    2.1/ 验证每一类的val，并可以以此修改next batch
+    '''
+    if val_per_class :
+        sum_loss = 0
+        sum_acc = 0
+        for iters in range(num_classes):
+            if dataset_wangyi.dataset_slice[iters].get_train_length() == 0 or dataset_wangyi.dataset_slice[
+                iters].get_validation_length() == 0:
+                continue
+            history_test = model_cnn.model_cnn.evaluate(
+                x=x_5[iters],
+                y=y_5[iters],
+                batch_size=None,
+                verbose=2
+            )
 
-        # 不打印了，显示的界面篇幅有限
-        print('类%d loss:%.4f,acc:%.4f' % (iters, history_test[0], history_test[1]))
-        sum_loss += history_test[0] * val_batch_size[iters]
-        sum_acc += history_test[1] * val_batch_size[iters]
-        '''
-         2.3修改下一个train batch
+            # 不打印了，显示的界面篇幅有限
+            print('类%d loss:%.4f,acc:%.4f' % (iters, history_test[0], history_test[1]))
+            sum_loss += history_test[0] * val_batch_size[iters]
+            sum_acc += history_test[1] * val_batch_size[iters]
+            '''
+             2.3修改下一个train batch
+    
+            # val-loss 0.7以下不提供batch, 0.7 * 20 =14
+            next_train_batch_size = int(history_test[0] * 20)
+            # next_train_batch_size = int(history_test[0] * val_batch_size[iters])
+            # next_train_batch_size = history_test[0] + train_allow_loss[iters]
+            # next_train_batch_size = int (next_train_batch_size * val_batch_size[iters])
+            if next_train_batch_size > 50:
+                train_batch_List[iters] = next_train_batch_size =50
+            elif next_train_batch_size < 1:
+                train_batch_List[iters] = next_train_batch_size= 1
+            else:
+                train_batch_List[iters] = next_train_batch_size
+    
+            '''
+            # train_batch_List = [
+            #     24, 24, 24, 24,24
+            # ]
 
-        # val-loss 0.7以下不提供batch, 0.7 * 20 =14
-        next_train_batch_size = int(history_test[0] * 20)
-        # next_train_batch_size = int(history_test[0] * val_batch_size[iters])
-        # next_train_batch_size = history_test[0] + train_allow_loss[iters]
-        # next_train_batch_size = int (next_train_batch_size * val_batch_size[iters])
-        if next_train_batch_size > 50:
-            train_batch_List[iters] = next_train_batch_size =50
-        elif next_train_batch_size < 1:
-            train_batch_List[iters] = next_train_batch_size= 1
-        else:
-            train_batch_List[iters] = next_train_batch_size
-
-        '''
-        # train_batch_List = [
-        #     24, 24, 24, 24,24
-        # ]
-
-    dataset_wangyi.set_Batch_Size(train_batch_List, val_batch_size)
-    # sum_loss =sum_loss / np.sum(train_batch_List, axis = 0)
-    # sum_acc = sum_acc / np.sum(train_batch_List, axis=0)
+        dataset_wangyi.set_Batch_Size(train_batch_List, val_batch_size)
+        # sum_loss =sum_loss / np.sum(train_batch_List, axis = 0)
+        # sum_acc = sum_acc / np.sum(train_batch_List, axis=0)
 
 
 
@@ -252,7 +264,11 @@ for epoch in range(train_epoch):
     plt.legend(loc="lower left")
     plt.savefig(args["plot"])
     '''
-    print('耗时：%.1f 秒' % (clock() - time_1))
+    cost_time = clock() - time_1
+
+    need_time_to_end = datetime.timedelta(
+        seconds=(train_epoch -epoch-1) * int (cost_time))
+    print('耗时：%d秒,预估还需' % (cost_time),need_time_to_end)
 
 if os.path.exists(model_path):
     print('best_score_by_acc :%.4f' % best_score_by_acc)
