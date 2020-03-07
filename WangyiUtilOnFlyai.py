@@ -23,7 +23,7 @@ from flyai.source.base import DATA_PATH
 from flyai.source.csv_source import Csv
 import csv
 from model import Model
-
+import cv2
 
 lr_level = {
             0:0.001,
@@ -454,28 +454,11 @@ def ReadFileNames():
 
 if __name__=='__main__':
 
-    # a=Dataset()
-    # xx,yy = a.next_train_batch()
-    # print(xx.shape)
-    # print(yy.shape)
-    # print(yy)
+    a = cv2.imread('./data/input/images/2440.jpg')
+    if a is None:
+        print('none')
+    else:
+        print('is not none')
 
-    val_batch_size = {
-        0: 65,
-        1: 35,
-        2: 33,
-        3: 67,
-        4: 30
-    }
-    train_batch_List = [20] * 5
 
-    '''
-    flyai库中的提供的数据处理方法
-    传入整个数据训练多少轮，每批次批大小
-    '''
-
-    dataset_wangyi = DatasetByWangyi(5)
-    dataset_wangyi.set_Batch_Size(train_batch_List, val_batch_size)
-    x,y = dataset_wangyi.get_Next_Train_Batch()
-    print(x.shape)
-    print(y.shape)
+    print(a)

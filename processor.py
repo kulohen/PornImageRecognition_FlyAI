@@ -3,7 +3,8 @@ import cv2
 import numpy
 from flyai.processor.base import Base
 from flyai.processor.download import check_download
-
+from keras.preprocessing import image
+from keras.applications.densenet import preprocess_input
 from path import DATA_PATH
 
 '''
@@ -20,12 +21,11 @@ class Processor(Base):
 
     def input_x(self, image_path):
         path = check_download(image_path, DATA_PATH)
-        image = cv2.imread(path)
-        image = cv2.resize(image, (224, 224) ,interpolation=cv2.INTER_CUBIC)
-        x_data = numpy.array(image)
-        x_data = x_data.astype(numpy.float32)
-        x_data = numpy.multiply(x_data, 1.0 / 255.0)
+        img = image.load_img(path, target_size=(img_size[0], img_size[1]))
+        x_data = image.img_to_array(img)
+        x_data = preprocess_input(x_data)
         return x_data
+
 
     '''
     参数为csv中作为输入y的一条数据，该方法会被dataset.next_train_batch()
@@ -35,11 +35,9 @@ class Processor(Base):
 
     def output_x(self, image_path):
         path = check_download(image_path, DATA_PATH)
-        image = cv2.imread(path)
-        image = cv2.resize(image, (224, 224) ,interpolation=cv2.INTER_CUBIC)
-        x_data = numpy.array(image)
-        x_data = x_data.astype(numpy.float32)
-        x_data = numpy.multiply(x_data, 1.0 / 255.0)
+        img = image.load_img(path, target_size=(img_size[0], img_size[1]))
+        x_data = image.img_to_array(img)
+        x_data = preprocess_input(x_data)
         return x_data
 
     '''
