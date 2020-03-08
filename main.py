@@ -52,7 +52,7 @@ args = parser.parse_args()
 
 num_classes = 5
 # 训练集的每类的batch的量，组成的list
-train_batch_List = [args.BATCH * 2 ] * num_classes
+train_batch_List = [ 80 ] * num_classes
 # 验证集的batch量，模拟预测集
 val_batch_size = {
     0: 21,
@@ -99,8 +99,6 @@ if os.path.exists(model_path):
 time_0 = clock()
 # 创建最终模型
 model_cnn = Net(num_classes=num_classes)
-# model_cnn = my_net.get_Model()
-# model_cnn = keras_model(inputs=Inp, outputs=predictions)
 
 # 输出模型的整体信息
 model_cnn.model_cnn.summary()
@@ -145,7 +143,7 @@ for epoch in range(train_epoch):
     #                                         batch_size=args.BATCH ,epochs=1,verbose=2
     #                               )
     # print('np.sum(train_batch_List :',np.sum(train_batch_List))
-    for_fit_generator_train_steps = int(np.sum(train_batch_List, axis=0) * 2 / args.BATCH)
+    for_fit_generator_train_steps = int(np.sum(train_batch_List, axis=0) * 1.2 / args.BATCH)
     print('该fit_generator量:', for_fit_generator_train_steps)
     history_train = model_cnn.model_cnn.fit_generator(
         generator=data_iter_train,
@@ -181,30 +179,12 @@ for epoch in range(train_epoch):
             print('类%d loss:%.4f,acc:%.4f' % (iters, history_test[0], history_test[1]))
             sum_loss += history_test[0] * val_batch_size[iters]
             sum_acc += history_test[1] * val_batch_size[iters]
+
             '''
              2.3修改下一个train batch
-    
-            # val-loss 0.7以下不提供batch, 0.7 * 20 =14
-            next_train_batch_size = int(history_test[0] * 20)
-            # next_train_batch_size = int(history_test[0] * val_batch_size[iters])
-            # next_train_batch_size = history_test[0] + train_allow_loss[iters]
-            # next_train_batch_size = int (next_train_batch_size * val_batch_size[iters])
-            if next_train_batch_size > 50:
-                train_batch_List[iters] = next_train_batch_size =50
-            elif next_train_batch_size < 1:
-                train_batch_List[iters] = next_train_batch_size= 1
-            else:
-                train_batch_List[iters] = next_train_batch_size
-    
             '''
-            # train_batch_List = [
-            #     24, 24, 24, 24,24
-            # ]
 
         dataset_wangyi.set_Batch_Size(train_batch_List, val_batch_size)
-        # sum_loss =sum_loss / np.sum(train_batch_List, axis = 0)
-        # sum_acc = sum_acc / np.sum(train_batch_List, axis=0)
-
 
 
     '''
@@ -213,8 +193,7 @@ for epoch in range(train_epoch):
     # save best acc
     if history_train.history['val_acc'][0] > 0.80 and \
             round(best_score_by_loss, 2) >= round(history_train.history['val_loss'][0], 2):
-        # if history_train.history['acc'][0] > 0.6 and \
-        #         round(best_score_by_acc, 2) <= round(history_train.history['val_acc'][0], 2):
+
         model.save_model(model=model_cnn.model_cnn, path=MODEL_PATH, overwrite=True)
         best_score_by_acc = history_train.history['val_acc'][0]
         best_score_by_loss = history_train.history['val_loss'][0]
@@ -249,23 +228,7 @@ for epoch in range(train_epoch):
     5/ 冻结训练层
     '''
 
-    '''
-    # construct a plot that plots and saves the training history
-    N = np.arange(0, epoch)
-    plt.style.use("ggplot")
-    plt.figure()
-    plt.plot(N, history_train_all.history['loss'], label="train_loss")
-    plt.plot(N, history_train_all.history['val_loss'], label="val_loss")
-    plt.plot(N, history_train_all.history['acc'], label="train_acc")
-    plt.plot(N, history_train_all.history['val_acc'], label="val_acc")
-    plt.title("Training Loss and Accuracy")
-    plt.xlabel("Epoch #")
-    plt.ylabel("Loss/Accuracy")
-    plt.legend(loc="lower left")
-    plt.savefig(args["plot"])
-    '''
     cost_time = clock() - time_1
-
     need_time_to_end = datetime.timedelta(
         seconds=(train_epoch -epoch-1) * int (cost_time))
     print('耗时：%d秒,预估还需' % (cost_time),need_time_to_end)

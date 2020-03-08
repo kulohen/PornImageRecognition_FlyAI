@@ -116,7 +116,7 @@ class OptimizerByWangyi():
         return self.get_create_optimizer(optimizer_level[name] , lr_level[lr])
 
     def reduce_lr_by_loss_and_epoch(self,get_loss,get_epoch):
-        # tmp_opt = None
+        tmp_opt = None
         # if get_epoch == 0 or get_epoch == 50 or get_epoch == 100 or get_epoch == 150:
         #     pass
         # elif get_epoch % 50 == 0:
@@ -294,8 +294,10 @@ class DatasetByWangyi():
             per_2 = np.random.permutation(tmp_size)  # 打乱后的行号
             xx_tmp_train = xx_tmp_train[per_2, :, :, :]  # 获取打乱后的训练数据
             yy_tmp_train = yy_tmp_train[per_2, :]
-            xx_tmp_train = xx_tmp_train[0:tmp_size]
-            yy_tmp_train = yy_tmp_train[0:tmp_size]
+            # xx_tmp_train = xx_tmp_train[0:tmp_size]
+            # yy_tmp_train = yy_tmp_train[0:tmp_size]
+            xx_tmp_train = xx_tmp_train[0: int(tmp_size * self.dropout )]
+            yy_tmp_train = yy_tmp_train[0: int(tmp_size * self.dropout )]
 
             x_3.append(xx_tmp_train)
             y_3.append(yy_tmp_train)
