@@ -55,11 +55,11 @@ num_classes = 5
 train_batch_List = [args.BATCH * 2 ] * num_classes
 # 验证集的batch量，模拟预测集
 val_batch_size = {
-    0: 210,
-    1: 198,
-    2: 191,
-    3: 206,
-    4: 195
+    0: 21,
+    1: 20,
+    2: 19,
+    3: 20,
+    4: 20
 }
 #TODO 合并并且重新分割train-set和val的比例
 

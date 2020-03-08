@@ -116,23 +116,24 @@ class OptimizerByWangyi():
         return self.get_create_optimizer(optimizer_level[name] , lr_level[lr])
 
     def reduce_lr_by_loss_and_epoch(self,get_loss,get_epoch):
-        tmp_opt = None
-        if get_epoch == 0 or get_epoch == 50 or get_epoch == 100 or get_epoch == 150:
-            pass
-        elif get_epoch % 50 == 0:
+        # tmp_opt = None
+        # if get_epoch == 0 or get_epoch == 50 or get_epoch == 100 or get_epoch == 150:
+        #     pass
+        # elif get_epoch % 50 == 0:
+        #     tmp_opt = self.get_random_opt()
+        if get_epoch % 30 == 0:
             tmp_opt = self.get_random_opt()
-
         # 调整学习率，且只执行一次
         if get_loss < 0.8 and self.lr_level == 0:
 
             tmp_opt = self.get_create_optimizer(name='adagrad', lr_num=1e-4)
             self.lr_level = 1
 
-        elif get_loss < 0.6 and self.lr_level == 1:
+        elif get_loss < 0.4 and self.lr_level == 1:
             tmp_opt = self.get_create_optimizer(name='sgd', lr_num=1e-5)
             self.lr_level = 2
 
-        elif get_loss < 0.3 and self.lr_level == 2:
+        elif get_loss < 0.2 and self.lr_level == 2:
             tmp_opt = self.get_create_optimizer(name='sgd', lr_num=1e-4)
             self.lr_level = 3
 
