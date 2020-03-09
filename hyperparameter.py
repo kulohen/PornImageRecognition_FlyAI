@@ -2,6 +2,21 @@ import argparse
 from processor import img_size
 
 '''
+迭代版本 30
+in-res-v2
+最终评分 86
+EPOCHS 100
+BATCH SIZE 32
+耗时114分钟
+提交时间 2020-03-09 18-27-02
+
+迭代版本 29
+in-res-v2
+最终评分 84.2
+EPOCHS 100
+BATCH SIZE 16
+耗时106分钟
+提交时间 2020-03-09 16-58-41
 
 迭代版本 28
 resnet50
@@ -34,12 +49,44 @@ dense121
 EPOCHS 300 BATCH SIZE 24 耗时373分钟 提交时间 2020-03-08 00-35-24 
 '''
 
+num_classes = 5
+
+# 一、构建网络
+# net.py修改
+
+# 二、数据结构
+
+# 数据增强倍数
+per_train_ratio = 2
+# 保存最佳model的精准度，比如1%的准确范围写1,若2%的保存范围写2
+save_boundary =1.5
+
+
+#TODO 合并并且重新分割train-set和val的比例
+
+# 三、成绩（调参）：
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-e", "--EPOCHS", default=300, type=int, help="train epochs")
 parser.add_argument("-b", "--BATCH", default=16, type=int, help="batch size")
 args = parser.parse_args()
 
-num_classes = 5
+
+train_epoch = args.EPOCHS
+train_batch = args.BATCH
+
+
+# 随机学习率启动per epoch
+random_per_epoch = 20
+
+# 多岁epochs后降低学习率
+reduce_lr_per_epochs = 8
+
+
+# 四、性能or速度
+#是否开启每一类的验证,True代表开启（影响速率）
+val_per_class = False
+
 # 训练集的每类的batch的量，组成的list
 train_batch_List = [ 80 ] * num_classes
 # 验证集的batch量，模拟预测集
@@ -50,16 +97,10 @@ val_batch_size = {
     3: 41,
     4: 39
 }
-#TODO 合并并且重新分割train-set和val的比例
 
-#是否开启每一类的验证,True代表开启（影响速率）
-val_per_class = False
 
-train_epoch = args.EPOCHS
-train_batch = args.BATCH
 
-# 保存最佳model的精准度，比如1%的准确范围写1,若2%的保存范围写2
-save_boundary =1.5
+
 
 param_list =[
     '【参数情况】'
@@ -88,7 +129,7 @@ param_list =[
 ]
 
 
-#TODO  print参数，以便在flyai log里查看
+#  print参数，以便在flyai log里查看
 def printHpperparameter():
     for s in param_list:
         print(s)

@@ -61,7 +61,7 @@ val_batch_size = {
     3: 41,
     4: 39
 }
-#TODO 合并并且重新分割train-set和val的比例
+
 
 #是否开启每一类的验证,True代表开启（影响速率）
 val_per_class = False
@@ -216,13 +216,6 @@ for epoch in range(train_epoch):
         model_cnn.model_cnn.compile(loss='categorical_crossentropy',
                                     optimizer=tmp_opt,
                                     metrics=['accuracy'])
-
-    # TODO 新的学习率，还没完成
-    # if optimzer_custom.compareHistoryList( history_train_all['loss'] ,pationce= 5 ,min_delta=0.001) :
-    #     model_cnn.compile(loss='categorical_crossentropy',
-    #                       optimizer=optimzer_custom.get_next() ,
-    #                       metrics=['accuracy'])
-    # TODO 动态冻结训练层？
 
     '''
     5/ 冻结训练层

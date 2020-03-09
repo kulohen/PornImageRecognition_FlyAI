@@ -46,7 +46,7 @@ Keras模版项目下载： https://www.flyai.com/python/keras_template.zip
 项目的超参
 '''
 parser = argparse.ArgumentParser()
-parser.add_argument("-e", "--EPOCHS", default=300, type=int, help="train epochs")
+parser.add_argument("-e", "--EPOCHS", default=30, type=int, help="train epochs")
 parser.add_argument("-b", "--BATCH", default=16, type=int, help="batch size")
 args = parser.parse_args()
 
@@ -66,7 +66,8 @@ train_epoch = args.EPOCHS
 # 保存最佳model的精准度，比如1%的准确范围写1,若2%的保存范围写2
 save_boundary = hp.save_boundary
 
-
+# 数据增强倍数
+per_train_ratio = hp.per_train_ratio
 '''
 flyai库中的提供的数据处理方法
 传入整个数据训练多少轮，每批次批大小
@@ -143,7 +144,8 @@ for epoch in range(train_epoch):
     #                                         batch_size=args.BATCH ,epochs=1,verbose=2
     #                               )
     # print('np.sum(train_batch_List :',np.sum(train_batch_List))
-    for_fit_generator_train_steps = int(np.sum(train_batch_List, axis=0) * 1.2 / args.BATCH)
+    # for_fit_generator_train_steps = int(np.sum(train_batch_List, axis=0) * 1.2 / args.BATCH)
+    for_fit_generator_train_steps = int(np.sum(train_batch_List, axis=0) * per_train_ratio / args.BATCH)
     print('该fit_generator量:', for_fit_generator_train_steps)
     history_train = model_cnn.model_cnn.fit_generator(
         generator=data_iter_train,

@@ -24,6 +24,7 @@ from flyai.source.csv_source import Csv
 import csv
 from model import Model
 import cv2
+from hyperparameter import random_per_epoch,reduce_lr_per_epochs
 
 lr_level = {
             0:0.001,
@@ -56,6 +57,7 @@ class OptimizerByWangyi():
         self.lr_iterator = 0
         self.pationce_count = 0
         self.lr_level=0 #在训练时判断后+1 使用
+        self.now_optimizer = None
 
     def get_create_optimizer(self,name=None,lr_num=0):
         if name is None or lr_num<=0:
@@ -121,10 +123,22 @@ class OptimizerByWangyi():
         #     pass
         # elif get_epoch % 50 == 0:
         #     tmp_opt = self.get_random_opt()
+        # 多少个epochs后启动随机学习率，对应Warmup Scheduler的实现
         if get_epoch == 0:
             pass
-        elif get_epoch % 30 == 0:
+        elif get_epoch % random_per_epoch == 0:
             tmp_opt = self.get_random_opt()
+            self.now_optimizer =tmp_opt
+
+
+        #TODO 写成每此学习率都能规律下降，例如1e-3 到 1e-4 到1e-5
+        # if get_epoch % random_per_epoch==0:
+        #     pass
+        # elif ( get_epoch % random_per_epoch ) % reduce_lr_per_epochs == 0:
+        #     # 降低学习率
+        #     self.now_optimizer.lr
+        #     pass
+
         # 调整学习率，且只执行一次
         if get_loss < 0.8 and self.lr_level == 0:
 
@@ -291,7 +305,7 @@ class DatasetByWangyi():
             tmp_size = int(self.train_batch_List[iters] / self.dropout )
 
             xx_tmp_train, yy_tmp_train,_,_= self.dataset_slice[iters].next_batch(size=tmp_size, test_size=0)
-            #TODO dropout 0.5的量
+            # dropout 0.5的量
             tmp_size = len(xx_tmp_train)
             per_2 = np.random.permutation(tmp_size)  # 打乱后的行号
             xx_tmp_train = xx_tmp_train[per_2, :, :, :]  # 获取打乱后的训练数据
@@ -360,22 +374,6 @@ class DatasetByWangyi():
         print('Csvlist.count is ', len(Csvlist))
         return Csvlist
 
-    #TODO 没实现
-    def write_predict_Csv(self, filename='文件名.csv'):
-        # 1. 创建文件对象
-        f = open(filename, 'w', encoding='utf-8')
-
-        # 2. 基于文件对象构建 csv写入对象
-        csv_writer = csv.writer(f)
-
-        # 3. 构建列表头
-        csv_writer.writerow(["image_path", "labels"])
-
-        # 4. 写入csv文件内容
-        csv_writer.writerow(["l", '18', '男'])
-        csv_writer.writerow(["c", '20', '男'])
-        csv_writer.writerow(["w", '22', '女'])
-
 
     def predict_to_csv(self):
         save_file_name = 'upload-by-' + str(time.strftime("%Y-%m-%d-%H-%M-%S", time.localtime())+'.csv')
@@ -417,11 +415,9 @@ def ReadFileNames():
 
 if __name__=='__main__':
 
-    a = cv2.imread('./data/input/images/2440.jpg')
-    if a is None:
-        print('none')
-    else:
-        print('is not none')
+    a = OptimizerByWangyi()
 
-
-    print(a)
+    a.now_optimizer = a.get_random_opt()
+    print(a.now_optimizer.lr.name)
+    print(a.now_optimizer.lr.shape)
+    print(a.now_optimizer.lr.aggregation)
