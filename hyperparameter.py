@@ -3,6 +3,16 @@ from processor import img_size
 
 '''
 
+迭代版本 28
+resnet50
+EPOCHS 300 BATCH SIZE 32 提交时间 2020-03-09 08-52-48 
+当前best_score_acc :0.8100【50epoch，和16,24目测一致】
+
+迭代版本 27
+resnet50
+最终评分 82.33
+EPOCHS 300 BATCH SIZE 24 耗时243分钟 提交时间 2020-03-09 08-52-21 
+
 迭代版本 26
 resnet50,200 on val
 最终评分 82.8
