@@ -1,6 +1,29 @@
 import argparse
 from processor import img_size
 
+'''
+
+迭代版本 26
+resnet50,200 on val
+最终评分 82.8
+EPOCHS 300 BATCH SIZE 16 耗时269分钟 提交时间 2020-03-09 08-47-58 
+
+迭代版本 25
+resnet50,
+最终评分 81.67
+EPOCHS 300 BATCH SIZE 16 耗时236分钟 提交时间 2020-03-09 01-11-33 
+
+迭代版本 24
+dense121
+最终评分 77
+EPOCHS 300 BATCH SIZE 16 耗时194分钟 提交时间 2020-03-09 00-50-57 
+
+迭代版本 23
+dense121
+最终评分 79.07
+EPOCHS 300 BATCH SIZE 24 耗时373分钟 提交时间 2020-03-08 00-35-24 
+'''
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-e", "--EPOCHS", default=300, type=int, help="train epochs")
 parser.add_argument("-b", "--BATCH", default=16, type=int, help="batch size")
