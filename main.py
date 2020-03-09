@@ -55,11 +55,11 @@ num_classes = 5
 train_batch_List = [ 80 ] * num_classes
 # 验证集的batch量，模拟预测集
 val_batch_size = {
-    0: 21,
-    1: 20,
-    2: 19,
-    3: 20,
-    4: 20
+    0: 42,
+    1: 40,
+    2: 38,
+    3: 41,
+    4: 39
 }
 #TODO 合并并且重新分割train-set和val的比例
 
@@ -104,7 +104,7 @@ model_cnn = Net(num_classes=num_classes)
 model_cnn.model_cnn.summary()
 
 model_cnn.model_cnn.compile(loss='categorical_crossentropy',
-                            optimizer=wangyiOpt.get_create_optimizer(name='adam', lr_num=1e-3),
+                            optimizer=wangyiOpt.get_create_optimizer(name='adam', lr_num=1e-4),
                             metrics=['accuracy']
                             )
 

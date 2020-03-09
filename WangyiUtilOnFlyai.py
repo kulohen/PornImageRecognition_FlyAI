@@ -126,7 +126,7 @@ class OptimizerByWangyi():
         # 调整学习率，且只执行一次
         if get_loss < 0.8 and self.lr_level == 0:
 
-            tmp_opt = self.get_create_optimizer(name='adagrad', lr_num=1e-4)
+            tmp_opt = self.get_create_optimizer(name='adagrad', lr_num=3e-5)
             self.lr_level = 1
 
         elif get_loss < 0.4 and self.lr_level == 1:
@@ -138,7 +138,7 @@ class OptimizerByWangyi():
             self.lr_level = 3
 
         elif get_loss < 0.1 and self.lr_level == 3:
-            tmp_opt = self.get_create_optimizer(name='adagrad', lr_num=1e-5)
+            tmp_opt = self.get_create_optimizer(name='sgd', lr_num=1e-5)
             self.lr_level = 4
 
         return tmp_opt
