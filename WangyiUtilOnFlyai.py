@@ -121,7 +121,9 @@ class OptimizerByWangyi():
         #     pass
         # elif get_epoch % 50 == 0:
         #     tmp_opt = self.get_random_opt()
-        if get_epoch % 30 == 0:
+        if get_epoch == 0:
+            pass
+        elif get_epoch % 30 == 0:
             tmp_opt = self.get_random_opt()
         # 调整学习率，且只执行一次
         if get_loss < 0.8 and self.lr_level == 0:

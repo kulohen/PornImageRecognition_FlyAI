@@ -3,22 +3,29 @@
 开局lr=0.001改到1e-4
 调参总结：
 
-一/成绩（调参）：  
+一、构建网络  
 框架/神经网络修改  
 冻结训练层  
 learn transfer  
-激活函数linear line 非relu sigmoid  
-dropout  
-epoch 介于15-20  
-learn rate  
-batch影响梯度  
+激活函数linear line 非relu sigmoid
+
+二、数据结构  
+训练数据平衡  
 图片分辨率  
 重置train:val的数据量比例  
 数据增强  
+保存model的条件  
+Train set dropout0.5（一定程度避开噪音，不一定奏效）  
 
-二/速度  
-减少VAL的量  
+三、成绩（调参）：  
+epoch 介于15-20  
+learn rate  
+batch影响梯度  
+
+四、性能or速度  
+减少val_batch的量  
 轻度框架  
+
 
 292行 util里，drop 0.5还没验证
 

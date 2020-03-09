@@ -3,7 +3,7 @@
 Created on Mon Oct 30 19:44:02 2017
 @author: user
 """
-import hyperparameter as hp
+
 import datetime
 import psutil
 import os
@@ -50,21 +50,28 @@ parser.add_argument("-e", "--EPOCHS", default=300, type=int, help="train epochs"
 parser.add_argument("-b", "--BATCH", default=16, type=int, help="batch size")
 args = parser.parse_args()
 
-
-
-num_classes = hp.num_classes
+num_classes = 5
 # 训练集的每类的batch的量，组成的list
-train_batch_List = hp.train_batch_List
+train_batch_List = [ 80 ] * num_classes
 # 验证集的batch量，模拟预测集
-val_batch_size = hp.val_batch_size
+val_batch_size = {
+    0: 42,
+    1: 40,
+    2: 38,
+    3: 41,
+    4: 39
+}
+#TODO 合并并且重新分割train-set和val的比例
 
 #是否开启每一类的验证,True代表开启（影响速率）
-val_per_class = hp.val_per_class
+val_per_class = False
 
 train_epoch = args.EPOCHS
-
-# 保存最佳model的精准度，比如1%的准确范围写1,若2%的保存范围写2
-save_boundary = hp.save_boundary
+history_train = 0
+history_test = 0
+best_score_by_acc = 0.
+best_score_by_loss = 999.
+lr_level = 0
 
 
 '''
@@ -78,12 +85,6 @@ dataset_wangyi = DatasetByWangyi(num_classes)
 dataset_wangyi.set_Batch_Size(train_batch_List, val_batch_size)
 myhistory = historyByWangyi()
 wangyiOpt = OptimizerByWangyi()
-history_train = 0
-history_test = 0
-best_score_by_acc = 0.
-best_score_by_loss = 999.
-best_epoch = 0
-
 '''
 清理h5文件
 '''
@@ -100,7 +101,6 @@ time_0 = clock()
 model_cnn = Net(num_classes=num_classes)
 
 # 输出模型的整体信息
-hp.printHpperparameter()
 model_cnn.model_cnn.summary()
 
 model_cnn.model_cnn.compile(loss='categorical_crossentropy',
@@ -192,18 +192,17 @@ for epoch in range(train_epoch):
     '''
     # save best acc
     if history_train.history['val_acc'][0] > 0.80 and \
-            round(best_score_by_loss/save_boundary, 2) >= round(history_train.history['val_loss'][0] /save_boundary, 2):
+            round(best_score_by_loss, 2) >= round(history_train.history['val_loss'][0], 2):
 
         model.save_model(model=model_cnn.model_cnn, path=MODEL_PATH, overwrite=True)
         best_score_by_acc = history_train.history['val_acc'][0]
         best_score_by_loss = history_train.history['val_loss'][0]
-        best_epoch = epoch
-        print('【保存】best by val_loss:%.2f' % best_score_by_loss)
+        print('【保存】了最佳模型by val_loss : %.4f' % best_score_by_loss)
 
     if best_score_by_acc == 0 :
         print('未能满足best_score的条件')
     else:
-        print('当前best:acc:%.2f,loss:%.2f,epoch:%d' %(best_score_by_acc,best_score_by_loss,best_epoch+1) )
+        print('当前best_score_acc :%.4f' % best_score_by_acc)
     # 调用系统打印日志函数，这样在线上可看到训练和校验准确率和损失的实时变化曲线
     # train_log(train_loss=history_train.history['loss'][0], train_acc=history_train.history['acc'][0], val_loss=history_train.history['val_loss'][0], val_acc=history_train.history['val_acc'][0])
 
