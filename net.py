@@ -21,19 +21,19 @@ class Net():
             # weights_path = remote_helper.get_remote_data(
             #     'https://www.flyai.com/m/v0.8|densenet121_weights_tf_dim_ordering_tf_kernels_notop.h5')
             # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|densenet201_weights_tf_dim_ordering_tf_kernels_notop.h5')
-            # weights_path = remote_helper.get_remote_date(
-            #    'https://www.flyai.com/m/v0.7|inception_resnet_v2_weights_tf_dim_ordering_tf_kernels_notop.h5')
+            weights_path = remote_helper.get_remote_date(
+               'https://www.flyai.com/m/v0.7|inception_resnet_v2_weights_tf_dim_ordering_tf_kernels_notop.h5')
 
-            weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|NASNet-large-no-top.h5')
+            # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|NASNet-large-no-top.h5')
         except OSError:
             weights_path = 'imagenet'
 
 
         # base_model = ResNet50(weights=None, input_shape=(img_size[0], img_size[1], 3), include_top=False)
         # base_model = ResNet50(weights=weights_path, include_top=False ,input_shape=(img_size[0], img_size[1],3))
-        # base_model = InceptionResNetV2(weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3))
-        base_model = NASNetLarge(weights=weights_path, include_top=False,
-                                       input_shape=(img_size[0], img_size[1], 3))
+        base_model = InceptionResNetV2(weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3))
+        # base_model = NASNetLarge(weights=weights_path, include_top=False,
+        #                                input_shape=(img_size[0], img_size[1], 3))
 
 
         Inp = Input(shape=(img_size[0], img_size[1],3))
