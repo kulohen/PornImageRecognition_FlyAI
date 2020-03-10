@@ -26,22 +26,41 @@ from model import Model
 import cv2
 from hyperparameter import random_per_epoch,reduce_lr_per_epochs
 
-lr_level = {
-            0:0.001,
-            1:0.0003,
-            2:0.0001,
-            3:3e-5,
-            4:1e-5
-        }
-optimizer_level = {
-    0: 'sgd',
-    1: 'rmsprop',
-    2: 'adagrad',
-    3: 'adadelta',
-    4: 'adam',
-    5: 'adamax',
-    6: 'nadam'
-}
+# lr_level = {
+#             0:0.001,
+#             1:0.0003,
+#             2:0.0001,
+#             3:3e-5,
+#             4:1e-5
+#         }
+# optimizer_level = {
+#     0: 'sgd',
+#     1: 'rmsprop',
+#     2: 'adagrad',
+#     3: 'adadelta',
+#     4: 'adam',
+#     5: 'adamax',
+#     6: 'nadam'
+# }
+
+lr_level = [
+    0.001,
+    0.0003,
+    0.0001,
+    3e-5,
+    1e-5
+]
+
+optimizer_level = [
+    'sgd',
+    'rmsprop',
+    'adagrad',
+    'adadelta',
+    'adam',
+    'adamax',
+    'nadam'
+]
+
 optimizer_name = {
             'sgd' : optmzs.SGD,
             'rmsprop': optmzs.RMSprop,
@@ -57,14 +76,22 @@ class OptimizerByWangyi():
         self.lr_iterator = 0
         self.pationce_count = 0
         self.lr_level=0 #在训练时判断后+1 使用
-        self.now_optimizer = None
+        # self.now_optimizer = None
+        self.now_opt_name = None    # 当前的优化器
+        self.now_opt_lr = None  # 当前的学习率
+        self.now_opt_name_lv = -1    # 当前的优化器索引
+        self.now_opt_lr_lv = -1  # 当前的学习率索引
 
-    def get_create_optimizer(self,name=None,lr_num=0):
+    def get_create_optimizer(self,name,lr_num):
         if name is None or lr_num<=0:
             raise ValueError('请指定正确的优化器/学习率')
 
         x = optimizer_name[name](lr=lr_num)
-        print('采用了优化器： ',name , ' --学习率: ', lr_num)
+        self.now_opt_name = name
+        self.now_opt_lr = lr_num
+        self.now_opt_name_lv = optimizer_level.index(name)
+        self.now_opt_lr_lv = lr_level.index(lr_num)
+        print('采用了优化器：',name , '--学习率:', lr_num)
         return x
 
     def get_next(self, optimzer = None, lr = None):
@@ -115,45 +142,52 @@ class OptimizerByWangyi():
         name = np.random.randint(0, 6)
         lr = np.random.randint(0, 5)
         print('启动随机de学习率')
+        # self.now_opt_name = name
+        # self.now_opt_lr = lr
         return self.get_create_optimizer(optimizer_level[name] , lr_level[lr])
 
     def reduce_lr_by_loss_and_epoch(self,get_loss,get_epoch):
         tmp_opt = None
-        # if get_epoch == 0 or get_epoch == 50 or get_epoch == 100 or get_epoch == 150:
-        #     pass
-        # elif get_epoch % 50 == 0:
-        #     tmp_opt = self.get_random_opt()
+
         # 多少个epochs后启动随机学习率，对应Warmup Scheduler的实现
-        if get_epoch == 0:
-            pass
-        elif get_epoch % random_per_epoch == 0:
+        # if get_epoch == 0:
+        #     pass
+        # elif get_epoch % random_per_epoch == 0:
+        if get_epoch % random_per_epoch == random_per_epoch-1:
+            print('经过%d epochs：' % get_epoch)
             tmp_opt = self.get_random_opt()
-            self.now_optimizer =tmp_opt
 
 
-        #TODO 写成每此学习率都能规律下降，例如1e-3 到 1e-4 到1e-5
+        # 每此学习率都能规律下降，例如1e-3 到 1e-4 到1e-5
         # if get_epoch % random_per_epoch==0:
         #     pass
         # elif ( get_epoch % random_per_epoch ) % reduce_lr_per_epochs == 0:
-        #     # 降低学习率
-        #     self.now_optimizer.lr
-        #     pass
+        if get_epoch % random_per_epoch==0:
+            pass
+        elif ( get_epoch % random_per_epoch ) % reduce_lr_per_epochs == reduce_lr_per_epochs-1:
+            # 降低学习率
+            self.now_opt_lr_lv = (self.now_opt_lr_lv+1) % 5 # lr_level的范围
+            print('经过%d epochs降低学习率'%reduce_lr_per_epochs)
+            self.get_create_optimizer(self.now_opt_name, self.now_opt_lr)
 
         # 调整学习率，且只执行一次
         if get_loss < 0.8 and self.lr_level == 0:
-
+            print('val loss 低于 %.1f' % 0.8)
             tmp_opt = self.get_create_optimizer(name='adagrad', lr_num=3e-5)
             self.lr_level = 1
 
         elif get_loss < 0.4 and self.lr_level == 1:
+            print('val loss 低于 %.1f' % 0.4)
             tmp_opt = self.get_create_optimizer(name='sgd', lr_num=1e-5)
             self.lr_level = 2
 
         elif get_loss < 0.2 and self.lr_level == 2:
+            print('val loss 低于 %.1f' % 0.2)
             tmp_opt = self.get_create_optimizer(name='sgd', lr_num=1e-4)
             self.lr_level = 3
 
         elif get_loss < 0.1 and self.lr_level == 3:
+            print('val loss 低于 %.1f' % 0.1)
             tmp_opt = self.get_create_optimizer(name='sgd', lr_num=1e-5)
             self.lr_level = 4
 
@@ -417,7 +451,11 @@ if __name__=='__main__':
 
     a = OptimizerByWangyi()
 
-    a.now_optimizer = a.get_random_opt()
-    print(a.now_optimizer.lr.name)
-    print(a.now_optimizer.lr.shape)
-    print(a.now_optimizer.lr.aggregation)
+    opt = a.get_random_opt()
+    for n in range(50):
+        print('step %d' % n)
+        a.reduce_lr_by_loss_and_epoch(get_loss=0.5,get_epoch=n)
+    # print(a.now_optimizer.lr.name)
+    # print(a.now_optimizer.lr.shape)
+    # print(a.now_optimizer.lr.aggregation)
+

@@ -57,7 +57,7 @@ num_classes = 5
 # 二、数据结构
 
 # 数据增强倍数
-per_train_ratio = 2
+per_train_ratio = 3
 # 保存最佳model的精准度，比如1%的准确范围写1,若2%的保存范围写2
 save_boundary =1.5
 
