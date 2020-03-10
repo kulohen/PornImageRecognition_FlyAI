@@ -47,7 +47,7 @@ Keras模版项目下载： https://www.flyai.com/python/keras_template.zip
 '''
 parser = argparse.ArgumentParser()
 parser.add_argument("-e", "--EPOCHS", default=30, type=int, help="train epochs")
-parser.add_argument("-b", "--BATCH", default=4, type=int, help="batch size")
+parser.add_argument("-b", "--BATCH", default=2, type=int, help="batch size")
 args = parser.parse_args()
 
 
@@ -217,7 +217,7 @@ for epoch in range(train_epoch):
     if best_score_by_acc == 0 :
         print('未能满足best_score的条件')
     else:
-        print('当前best:acc:%.2f,loss:%.2f,epoch:%d' %(best_score_by_acc,best_score_by_loss,best_epoch+1) )
+        print('当前【best】:acc:%.2f, loss:%.2f, epoch:%d' %(best_score_by_acc,best_score_by_loss,best_epoch+1) )
     # 调用系统打印日志函数，这样在线上可看到训练和校验准确率和损失的实时变化曲线
     # train_log(train_loss=history_train.history['loss'][0], train_acc=history_train.history['acc'][0], val_loss=history_train.history['val_loss'][0], val_acc=history_train.history['val_acc'][0])
 

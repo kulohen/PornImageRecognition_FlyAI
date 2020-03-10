@@ -1,10 +1,13 @@
-2020-3-10
-启用 363*363 分辨率 或者更大
-save model by best acc （其中的最小loss）
+2020-3-10  
+启用 363*363 分辨率 或者更大  
+save model by best acc （其中的最小loss）  
+200 on val 改称400  
+修正bug ：per 8 epoch 下降lr  
 
 2020/03/09  
 100 on val 改到 200
 开局lr=0.001改到1e-4
+
 调参总结：
 
 一、构建网络  

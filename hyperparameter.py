@@ -72,6 +72,7 @@ parser.add_argument("-b", "--BATCH", default=16, type=int, help="batch size")
 args = parser.parse_args()
 
 
+
 train_epoch = args.EPOCHS
 train_batch = args.BATCH
 

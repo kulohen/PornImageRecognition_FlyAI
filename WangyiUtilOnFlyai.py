@@ -48,7 +48,8 @@ lr_level = [
     0.0003,
     0.0001,
     3e-5,
-    1e-5
+    1e-5,
+    3e-6
 ]
 
 optimizer_level = [
@@ -139,8 +140,8 @@ class OptimizerByWangyi():
             return False
 
     def get_random_opt(self):
-        name = np.random.randint(0, 6)
-        lr = np.random.randint(0, 5)
+        name = np.random.randint(0, len(optimizer_name))
+        lr = np.random.randint(0, len(lr_level))
         print('启动随机de学习率')
         # self.now_opt_name = name
         # self.now_opt_lr = lr
@@ -150,25 +151,20 @@ class OptimizerByWangyi():
         tmp_opt = None
 
         # 多少个epochs后启动随机学习率，对应Warmup Scheduler的实现
-        # if get_epoch == 0:
-        #     pass
-        # elif get_epoch % random_per_epoch == 0:
         if get_epoch % random_per_epoch == random_per_epoch-1:
             print('经过%d epochs：' % random_per_epoch)
             tmp_opt = self.get_random_opt()
 
 
         # 每此学习率都能规律下降，例如1e-3 到 1e-4 到1e-5
-        # if get_epoch % random_per_epoch==0:
-        #     pass
-        # elif ( get_epoch % random_per_epoch ) % reduce_lr_per_epochs == 0:
-        if get_epoch % random_per_epoch==0:
+
+        if get_epoch < random_per_epoch :
             pass
         elif ( get_epoch % random_per_epoch ) % reduce_lr_per_epochs == reduce_lr_per_epochs-1:
             # 降低学习率
-            self.now_opt_lr_lv = (self.now_opt_lr_lv+1) % 5 # lr_level的范围
+            self.now_opt_lr_lv = (self.now_opt_lr_lv+1) % len(lr_level) # lr_level的范围
             print('经过%d epochs降低学习率'%reduce_lr_per_epochs)
-            self.get_create_optimizer(self.now_opt_name, self.now_opt_lr)
+            self.get_create_optimizer(self.now_opt_name, lr_level[self.now_opt_lr_lv])
 
         # 调整学习率，且只执行一次
         if get_loss < 0.8 and self.lr_level == 0:
@@ -455,7 +451,9 @@ if __name__=='__main__':
     for n in range(50):
         print('step %d' % n)
         a.reduce_lr_by_loss_and_epoch(get_loss=0.5,get_epoch=n)
+        print(a.now_opt_lr,a.now_opt_lr_lv,a.now_opt_name,a.now_opt_name_lv)
+        print()
     # print(a.now_optimizer.lr.name)
     # print(a.now_optimizer.lr.shape)
     # print(a.now_optimizer.lr.aggregation)
-
+    print(len(lr_level))
