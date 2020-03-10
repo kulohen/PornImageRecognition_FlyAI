@@ -1,3 +1,7 @@
+2020-3-10
+启用 363*363 分辨率 或者更大
+save model by best acc （其中的最小loss）
+
 2020/03/09  
 100 on val 改到 200
 开局lr=0.001改到1e-4
@@ -14,7 +18,7 @@ learn transfer
 图片分辨率  
 重置train:val的数据量比例  
 数据增强  
-保存model的条件  
+保存model的条件:精确值，save loss or acc  
 Train set dropout0.5（一定程度避开噪音，不一定奏效）  
 
 三、成绩（调参）：  

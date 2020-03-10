@@ -154,7 +154,7 @@ class OptimizerByWangyi():
         #     pass
         # elif get_epoch % random_per_epoch == 0:
         if get_epoch % random_per_epoch == random_per_epoch-1:
-            print('经过%d epochs：' % get_epoch)
+            print('经过%d epochs：' % random_per_epoch)
             tmp_opt = self.get_random_opt()
 
 

@@ -47,7 +47,7 @@ Keras模版项目下载： https://www.flyai.com/python/keras_template.zip
 '''
 parser = argparse.ArgumentParser()
 parser.add_argument("-e", "--EPOCHS", default=30, type=int, help="train epochs")
-parser.add_argument("-b", "--BATCH", default=8, type=int, help="batch size")
+parser.add_argument("-b", "--BATCH", default=4, type=int, help="batch size")
 args = parser.parse_args()
 
 
@@ -192,15 +192,27 @@ for epoch in range(train_epoch):
     '''
     3/ 保存最佳模型model
     '''
-    # save best acc
-    if history_train.history['val_acc'][0] > 0.80 and \
-            round(best_score_by_loss/save_boundary, 2) >= round(history_train.history['val_loss'][0] /save_boundary, 2):
 
-        model.save_model(model=model_cnn.model_cnn, path=MODEL_PATH, overwrite=True)
-        best_score_by_acc = history_train.history['val_acc'][0]
-        best_score_by_loss = history_train.history['val_loss'][0]
-        best_epoch = epoch
-        print('【保存】best by val_loss:%.2f' % best_score_by_loss)
+    # save best acc
+    if history_train.history['val_acc'][0] > 0.80 :
+        if round(best_score_by_acc/save_boundary, 2) < round(history_train.history['val_acc'][0] /save_boundary, 2):
+            model.save_model(model=model_cnn.model_cnn, path=MODEL_PATH, overwrite=True)
+            best_score_by_acc = history_train.history['val_acc'][0]
+            best_score_by_loss = history_train.history['val_loss'][0]
+            best_epoch = epoch
+            print('【保存了best： acc提升】')
+
+        elif round(best_score_by_acc/save_boundary, 2) == round(history_train.history['val_acc'][0] /save_boundary, 2):
+            if round(best_score_by_loss/save_boundary, 2) >= round(history_train.history['val_loss'][0] /save_boundary, 2):
+                model.save_model(model=model_cnn.model_cnn, path=MODEL_PATH, overwrite=True)
+                best_score_by_acc = history_train.history['val_acc'][0]
+                best_score_by_loss = history_train.history['val_loss'][0]
+                best_epoch = epoch
+                print('【保存了best：acc相同，loss降低】')
+    # if history_train.history['val_acc'][0] > 0.80 and \
+    #         round(best_score_by_loss/save_boundary, 2) >= round(history_train.history['val_loss'][0] /save_boundary, 2):
+
+
 
     if best_score_by_acc == 0 :
         print('未能满足best_score的条件')
@@ -239,6 +251,7 @@ for epoch in range(train_epoch):
 if os.path.exists(model_path):
     print('best_score_by_acc :%.4f' % best_score_by_acc)
     print('best_score_by_loss :%.4f' % best_score_by_loss)
+    print('best_score at epoch:%d' % best_epoch)
 else:
     print('未达到save best acc的条件，已保存最后一次运行的model')
     model.save_model(model=model_cnn.model_cnn, path=MODEL_PATH, overwrite=True)

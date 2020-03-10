@@ -57,7 +57,7 @@ num_classes = 5
 # 二、数据结构
 
 # 数据增强倍数
-per_train_ratio = 3
+per_train_ratio = 4
 # 保存最佳model的精准度，比如1%的准确范围写1,若2%的保存范围写2
 save_boundary =1.5
 
@@ -91,11 +91,11 @@ val_per_class = False
 train_batch_List = [ 80 ] * num_classes
 # 验证集的batch量，模拟预测集
 val_batch_size = {
-    0: 42,
-    1: 40,
-    2: 38,
-    3: 41,
-    4: 39
+    0: 84,
+    1: 79,
+    2: 76,
+    3: 83,
+    4: 78
 }
 
 
