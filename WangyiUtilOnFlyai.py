@@ -24,7 +24,7 @@ from flyai.source.csv_source import Csv
 import csv
 from model import Model
 import cv2
-from hyperparameter import random_per_epoch,reduce_lr_per_epochs
+from hyperparameter import random_per_epoch,reduce_lr_per_epochs,scale_num
 
 # lr_level = {
 #             0:0.001,
@@ -442,6 +442,21 @@ def ReadFileNames():
         print(root)  # 当前目录路径
         print(dirs)  # 当前路径下所有子目录
         print(files)  # 当前路径下所有非目录子文件
+
+
+def random_crop_image(image):
+    height, width = image.shape[:2]
+
+    assert image.shape[2] == 3
+    height, width = image.shape[0], image.shape[1]
+    dy, dx = int(height * scale_num), int(width * scale_num)
+    x = np.random.randint(0, width - dx + 1)
+    y = np.random.randint(0, height - dy + 1)
+
+    image_crop = image[y:dy + y, x:dx + x, 0:3]
+    # image_crop = misc.resize(image_crop,image.shape)
+    image_crop = cv2.resize(image_crop, (width, height))
+    return image_crop
 
 if __name__=='__main__':
 

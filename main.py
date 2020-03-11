@@ -19,7 +19,7 @@ from keras.preprocessing.image import ImageDataGenerator
 from model import Model
 from path import MODEL_PATH
 import WangyiUtilOnFlyai
-from WangyiUtilOnFlyai import DatasetByWangyi, historyByWangyi, OptimizerByWangyi
+from WangyiUtilOnFlyai import DatasetByWangyi, historyByWangyi, OptimizerByWangyi,random_crop_image
 from keras.engine.saving import load_model
 from model import KERAS_MODEL_NAME
 import tensorflow as tf
@@ -47,7 +47,7 @@ Keras模版项目下载： https://www.flyai.com/python/keras_template.zip
 '''
 parser = argparse.ArgumentParser()
 parser.add_argument("-e", "--EPOCHS", default=30, type=int, help="train epochs")
-parser.add_argument("-b", "--BATCH", default=2, type=int, help="batch size")
+parser.add_argument("-b", "--BATCH", default=16, type=int, help="batch size")
 args = parser.parse_args()
 
 
@@ -129,7 +129,8 @@ for epoch in range(train_epoch):
         # shear_range=0.1,
         zoom_range=0.1,
         horizontal_flip=True,
-        vertical_flip=False
+        vertical_flip=False,
+        preprocessing_function=random_crop_image
     )
     # datagen.fit(x_train_and_x_val)
     data_iter_train = datagen.flow(x_3, y_3, batch_size=args.BATCH, save_to_dir=None)

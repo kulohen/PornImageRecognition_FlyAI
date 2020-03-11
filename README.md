@@ -1,3 +1,9 @@
+2020-3-11     
+NASnet large 费时费力，不太好用  
+val 200 or 400，耗时几乎一样（155s差1秒）  
+random—crop  
+352*352 resnet50  
+
 2020-3-10  
 启用 363*363 分辨率 或者更大  
 save model by best acc （其中的最小loss）  
