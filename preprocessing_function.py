@@ -8,6 +8,7 @@ import scipy.misc
 import sys
 import os
 import cv2
+from WangyiUtilOnFlyai import crop_image_center_80percent_to_input_function
 from  PIL import Image
 
 from keras.preprocessing import image
@@ -33,7 +34,7 @@ def random_crop_image(image):
 
 datagen = ImageDataGenerator(
 
-        preprocessing_function=random_crop_image
+        preprocessing_function=crop_image_center_80percent_to_input_function
 )
 
 img = load_img(image_path)

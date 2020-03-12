@@ -24,7 +24,7 @@ from flyai.source.csv_source import Csv
 import csv
 from model import Model
 import cv2
-from hyperparameter import random_per_epoch,reduce_lr_per_epochs,scale_num
+from hyperparameter import random_per_epoch,reduce_lr_per_epochs,scale_num,img_size
 
 # lr_level = {
 #             0:0.001,
@@ -455,6 +455,22 @@ def random_crop_image(image):
 
     image_crop = image[y:dy + y, x:dx + x, 0:3]
     # image_crop = misc.resize(image_crop,image.shape)
+    image_crop = cv2.resize(image_crop, (width, height))
+    return image_crop
+
+def crop_image_center_80percent_to_input_function(input_image):
+    assert input_image.shape[2] == 3
+    # input_image = cv2.resize(input_image,(299,299))
+    height, width = input_image.shape[:2]
+    # height, width = input_image.shape[0], input_image.shape[1]
+
+    # 保留的图片中心的比例，如80%，写0.8
+    center_scale = 0.8
+    (1-center_scale)/2
+    x =  int (width *  (1-center_scale)/2)
+    y = int (height * (1 - center_scale) / 2)
+
+    image_crop = input_image[y: y + img_size[0] , x: x+ img_size[1], 0:3]
     image_crop = cv2.resize(image_crop, (width, height))
     return image_crop
 
