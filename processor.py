@@ -6,11 +6,12 @@ from flyai.processor.download import check_download
 from keras.preprocessing import image
 from keras.applications.densenet import preprocess_input
 from path import DATA_PATH
+from hyperparameter import img_size
 
 '''
 把样例项目中的processor.py件复制过来替换即可
 '''
-img_size = [160, 160]
+
 
 class Processor(Base):
     '''

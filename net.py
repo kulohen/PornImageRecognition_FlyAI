@@ -1,14 +1,16 @@
 ## build CNN
-from keras.applications import ResNet50,VGG16,InceptionResNetV2,DenseNet121,DenseNet201,NASNetLarge
+from keras.applications import ResNet50,VGG16,InceptionResNetV2,DenseNet121,DenseNet201,NASNetLarge,NASNetMobile
 from keras.layers import Input,Conv2D, MaxPool2D, Dropout, Flatten, Dense, Activation, MaxPooling2D,ZeroPadding2D,BatchNormalization,LeakyReLU,GlobalAveragePooling2D
 from keras.models import Model as keras_model
 from keras.callbacks import EarlyStopping, TensorBoard,ModelCheckpoint,ReduceLROnPlateau
 from keras.optimizers import SGD,Adam,RMSprop
-from processor import img_size
+from hyperparameter import img_size
 from flyai.utils import remote_helper
 import psutil
 import os
 from keras.engine.saving import load_model
+
+weights_path =None
 
 class Net():
 
@@ -16,8 +18,9 @@ class Net():
         """Declare all needed layers."""
         self.num_classes = num_classes
         try:
-            # weights_path =None
-            weights_path = remote_helper.get_remote_date("https://www.flyai.com/m/v0.2|resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5")
+
+            weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|NASNet-mobile-no-top.h5')
+            # weights_path = remote_helper.get_remote_date("https://www.flyai.com/m/v0.2|resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5")
             # weights_path = remote_helper.get_remote_data(
             #     'https://www.flyai.com/m/v0.8|densenet121_weights_tf_dim_ordering_tf_kernels_notop.h5')
             # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|densenet201_weights_tf_dim_ordering_tf_kernels_notop.h5')
@@ -30,10 +33,9 @@ class Net():
 
 
         # base_model = ResNet50(weights=None, input_shape=(img_size[0], img_size[1], 3), include_top=False)
-        base_model = ResNet50(weights=weights_path, include_top=False ,input_shape=(img_size[0], img_size[1],3))
+        # base_model = ResNet50(weights=weights_path, include_top=False ,input_shape=(img_size[0], img_size[1],3))
         # base_model = InceptionResNetV2(weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3))
-        # base_model = NASNetLarge(weights=weights_path, include_top=False,
-        #                                input_shape=(img_size[0], img_size[1], 3))
+        base_model = NASNetMobile(weights=weights_path, include_top=False,input_shape=(img_size[0], img_size[1], 3))
 
 
         Inp = Input(shape=(img_size[0], img_size[1],3))
@@ -63,8 +65,9 @@ class Net():
         # for i, layer in enumerate(base_model.layers):
         #     print(i, layer.name)
         #
-        # for layer in base_model.layers[:]:
-        #     layer.trainable = False
+        for layer in base_model.layers[:]:
+            layer.trainable = False
+
         # print(layer)
 
         x = GlobalAveragePooling2D()(x)

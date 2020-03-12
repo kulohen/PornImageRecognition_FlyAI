@@ -1,5 +1,4 @@
 import argparse
-from processor import img_size
 
 '''
 迭代版本 30
@@ -53,6 +52,7 @@ num_classes = 5
 
 # 一、构建网络
 # net.py修改
+img_size = [224, 224]
 
 # 二、数据结构
 
@@ -82,10 +82,10 @@ train_batch = args.BATCH
 
 
 # 随机学习率启动per epoch
-random_per_epoch = 20
+random_per_epoch = 30
 
 # 多岁epochs后降低学习率
-reduce_lr_per_epochs = 8
+reduce_lr_per_epochs = 12
 
 
 # 四、性能or速度
@@ -112,14 +112,15 @@ param_list =[
     '一/构建网络',
     '框架/神经网络修改  ',
     '冻结训练层  ',
-    'learn transfer  ',
+    'learn transfer : %s'%'是',
     '激活函数linear line 非relu sigmoid',
     '',
     '二、数据结构',
     '训练数据平衡,%s'%'是',
     '图片分辨率,%d:%d'%(img_size[0],img_size[1]),
     '重置train:val的数据量比例,%.2f'%0.8,
-    '数据增强  ,%s'%'是',
+    '数据增强倍数,%.2f'%per_train_ratio,
+    'random-crop 裁剪的比例：%.2f'%scale_num,
     '保存model的条件,%.2f'%save_boundary,
     'Train set dropout0.5（一定程度避开噪音，不一定奏效）  ,%s'%'是',
     '',
