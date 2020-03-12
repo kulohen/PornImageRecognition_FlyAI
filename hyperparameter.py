@@ -133,7 +133,7 @@ num_classes = 5
 
 # 一、构建网络
 # net.py修改
-img_size = [224, 224]
+img_size = [299, 299]
 
 # 二、数据结构
 
@@ -144,7 +144,7 @@ per_train_ratio = 3
 scale_num = 0.75
 
 # 保存最佳model的精准度，比如1%的准确范围写1,若2%的保存范围写2
-save_boundary =1.5
+save_boundary =1
 
 
 #TODO 合并并且重新分割train-set和val的比例

@@ -1,3 +1,8 @@
+2020-3-12  
+ResNeXt application 居然没有？  
+https://stackoverflow.com/questions/57158756/unable-to-import-resnext-101-32%C3%9748d-from-keras-application  
+
+
 2020-3-11     
 NASnet large 费时费力，不太好用  
 val 200 or 400，耗时几乎一样（155s差1秒）  

@@ -1,5 +1,8 @@
 ## build CNN
 from keras.applications import ResNet50,VGG16,InceptionResNetV2,DenseNet121,DenseNet201,NASNetLarge,NASNetMobile
+# from keras.applications import ResNext101
+from keras_applications.resnext import ResNeXt101
+import keras
 from keras.layers import Input,Conv2D, MaxPool2D, Dropout, Flatten, Dense, Activation, MaxPooling2D,ZeroPadding2D,BatchNormalization,LeakyReLU,GlobalAveragePooling2D
 from keras.models import Model as keras_model
 from keras.callbacks import EarlyStopping, TensorBoard,ModelCheckpoint,ReduceLROnPlateau
@@ -10,7 +13,7 @@ import psutil
 import os
 from keras.engine.saving import load_model
 
-weights_path =None
+
 
 class Net():
 
@@ -19,13 +22,14 @@ class Net():
         self.num_classes = num_classes
         try:
 
-            weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|NASNet-mobile-no-top.h5')
+            weights_path = None
+            # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/resnext101_imagenet_1000_no_top.h5')
+            # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|NASNet-mobile-no-top.h5')
             # weights_path = remote_helper.get_remote_date("https://www.flyai.com/m/v0.2|resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5")
             # weights_path = remote_helper.get_remote_data(
             #     'https://www.flyai.com/m/v0.8|densenet121_weights_tf_dim_ordering_tf_kernels_notop.h5')
             # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|densenet201_weights_tf_dim_ordering_tf_kernels_notop.h5')
-            # weights_path = remote_helper.get_remote_date(
-            #    'https://www.flyai.com/m/v0.7|inception_resnet_v2_weights_tf_dim_ordering_tf_kernels_notop.h5')
+            weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.7|inception_resnet_v2_weights_tf_dim_ordering_tf_kernels_notop.h5')
 
             # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|NASNet-large-no-top.h5')
         except OSError:
@@ -34,10 +38,13 @@ class Net():
 
         # base_model = ResNet50(weights=None, input_shape=(img_size[0], img_size[1], 3), include_top=False)
         # base_model = ResNet50(weights=weights_path, include_top=False ,input_shape=(img_size[0], img_size[1],3))
-        # base_model = InceptionResNetV2(weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3))
-        base_model = NASNetMobile(weights=weights_path, include_top=False,input_shape=(img_size[0], img_size[1], 3))
-
-
+        base_model = InceptionResNetV2(weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3))
+        # base_model = NASNetMobile(weights=weights_path, include_top=False,input_shape=(img_size[0], img_size[1], 3))
+        # base_model = ResNeXt101(weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3),
+        #                                 backend=keras.backend,
+        #                               layers=keras.layers,
+        #                               models=keras.models,
+        #                               utils=keras.utils)
         Inp = Input(shape=(img_size[0], img_size[1],3))
 
         # x = Conv2D(256,3,
@@ -65,8 +72,8 @@ class Net():
         # for i, layer in enumerate(base_model.layers):
         #     print(i, layer.name)
         #
-        for layer in base_model.layers[:]:
-            layer.trainable = False
+        # for layer in base_model.layers[:]:
+        #     layer.trainable = False
 
         # print(layer)
 
@@ -94,6 +101,6 @@ class Net():
             print('内存占用率：', psutil.virtual_memory().percent, '%，将在90%重置model_cnn')
 
 if __name__=='__main__':
-    Net().get_Model().summary()
+    Net(5).model_cnn.summary()
     # x = VGG16()
     # x.summary()
