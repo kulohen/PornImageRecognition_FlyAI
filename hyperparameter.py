@@ -1,5 +1,5 @@
 import argparse
-
+from processor import img_size
 '''
 
 迭代版本 47
@@ -133,7 +133,7 @@ num_classes = 5
 
 # 一、构建网络
 # net.py修改
-img_size = [299, 299]
+
 
 # 二、数据结构
 

@@ -6,8 +6,8 @@ from flyai.processor.download import check_download
 from keras.preprocessing import image
 from keras.applications.densenet import preprocess_input
 from path import DATA_PATH
-from hyperparameter import img_size
 
+img_size = [299, 299]
 '''
 把样例项目中的processor.py件复制过来替换即可
 '''
