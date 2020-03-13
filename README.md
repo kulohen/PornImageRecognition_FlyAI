@@ -1,3 +1,6 @@
+2020-3-13  
+input里resize到373*373，再裁剪中间的299*299  
+
 2020-3-12  
 ResNeXt application 居然没有？  
 https://stackoverflow.com/questions/57158756/unable-to-import-resnext-101-32%C3%9748d-from-keras-application  

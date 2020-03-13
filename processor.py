@@ -7,11 +7,37 @@ from keras.preprocessing import image
 from keras.applications.densenet import preprocess_input
 from path import DATA_PATH
 
+# 输入train的size
 img_size = [299, 299]
+
+'''
+以下是crop_image_center_80percent_to_input_function的静态变量
+减少计算量
+'''
+# 保留的图片中心的比例，如80%，写0.8
+center_scale = 0.8
+
+# input_x的size，然后处理成img_size
+# origin_size = [int (img_size[0] / 0.8) , int (img_size[1] / 0.8)]
+#
+# x = int(origin_size[1] * (1 - center_scale) / 2)
+# y = int(origin_size[0] * (1 - center_scale) / 2)
+# dx = x + img_size[1]
+# dy = y + img_size[0]
+
+origin_size = [373, 373]
+x = 37
+y = 37
+dx = 336
+dy = 336
+
 '''
 把样例项目中的processor.py件复制过来替换即可
 '''
-
+def crop_image_center_80percent_to_input_function(input_image):
+    assert input_image.shape[2] == 3
+    image_crop = input_image[y: dy , x: dx, 0:3]
+    return image_crop
 
 class Processor(Base):
     '''
@@ -22,9 +48,10 @@ class Processor(Base):
 
     def input_x(self, image_path):
         path = check_download(image_path, DATA_PATH)
-        img = image.load_img(path, target_size=(img_size[0], img_size[1]))
+        img = image.load_img(path, target_size=(origin_size[0], origin_size[1]))
         x_data = image.img_to_array(img)
         x_data = preprocess_input(x_data)
+        x_data = crop_image_center_80percent_to_input_function(x_data)
         return x_data
 
 
@@ -36,9 +63,10 @@ class Processor(Base):
 
     def output_x(self, image_path):
         path = check_download(image_path, DATA_PATH)
-        img = image.load_img(path, target_size=(img_size[0], img_size[1]))
+        img = image.load_img(path, target_size=(origin_size[0], origin_size[1]))
         x_data = image.img_to_array(img)
         x_data = preprocess_input(x_data)
+        x_data = crop_image_center_80percent_to_input_function(x_data)
         return x_data
 
     '''
@@ -58,3 +86,9 @@ class Processor(Base):
 
     def output_y(self, data):
         return numpy.argmax(data)
+
+if __name__=='__main__':
+    print(origin_size)
+    img_size = [111,111]
+    print(origin_size)
+    print((x, y, dx, dy))
