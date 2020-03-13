@@ -44,8 +44,6 @@ from hyperparameter import random_per_epoch,reduce_lr_per_epochs,scale_num,img_s
 # }
 
 lr_level = [
-    0.001,
-    0.0003,
     0.0001,
     3e-5,
     1e-5,
@@ -463,15 +461,15 @@ def random_crop_image(image):
 if __name__=='__main__':
     print(round(0.034, 2))
     print(round(0.038, 2))
-    # a = OptimizerByWangyi()
-    #
-    # opt = a.get_random_opt()
-    # for n in range(50):
-    #     print('step %d' % n)
-    #     a.reduce_lr_by_loss_and_epoch(get_loss=0.5,get_epoch=n)
-    #     print(a.now_opt_lr,a.now_opt_lr_lv,a.now_opt_name,a.now_opt_name_lv)
-    #     print()
-    # # print(a.now_optimizer.lr.name)
-    # # print(a.now_optimizer.lr.shape)
-    # # print(a.now_optimizer.lr.aggregation)
-    # print(len(lr_level))
+    a = OptimizerByWangyi()
+
+    opt = a.get_random_opt()
+    for n in range(100):
+        print('step %d' % n)
+        a.reduce_lr_by_loss_and_epoch(get_loss=0.5,get_epoch=n)
+        print(a.now_opt_lr,a.now_opt_lr_lv,a.now_opt_name,a.now_opt_name_lv)
+        print()
+    # print(a.now_optimizer.lr.name)
+    # print(a.now_optimizer.lr.shape)
+    # print(a.now_optimizer.lr.aggregation)
+    print(len(lr_level))
