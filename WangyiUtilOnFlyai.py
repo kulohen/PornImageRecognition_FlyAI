@@ -167,17 +167,17 @@ class OptimizerByWangyi():
         # 调整学习率，且只执行一次
         if get_loss < 0.8 and self.lr_level == 0:
             print('val loss 低于 %.1f' % 0.8)
-            tmp_opt = self.get_create_optimizer(name='adagrad', lr_num=3e-5)
+            tmp_opt = self.get_create_optimizer(name='adam', lr_num=3e-5)
             self.lr_level = 1
 
         elif get_loss < 0.4 and self.lr_level == 1:
             print('val loss 低于 %.1f' % 0.4)
-            tmp_opt = self.get_create_optimizer(name='sgd', lr_num=1e-5)
+            tmp_opt = self.get_create_optimizer(name='adam', lr_num=1e-5)
             self.lr_level = 2
 
         elif get_loss < 0.2 and self.lr_level == 2:
             print('val loss 低于 %.1f' % 0.2)
-            tmp_opt = self.get_create_optimizer(name='sgd', lr_num=1e-4)
+            tmp_opt = self.get_create_optimizer(name='adam', lr_num=1e-4)
             self.lr_level = 3
 
         elif get_loss < 0.1 and self.lr_level == 3:

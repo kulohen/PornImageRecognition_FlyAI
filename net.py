@@ -26,20 +26,24 @@ class Net():
             # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/resnext101_imagenet_1000_no_top.h5')
             # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|NASNet-mobile-no-top.h5')
             # weights_path = remote_helper.get_remote_date("https://www.flyai.com/m/v0.2|resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5")
-            # weights_path = remote_helper.get_remote_data(
-            #     'https://www.flyai.com/m/v0.8|densenet121_weights_tf_dim_ordering_tf_kernels_notop.h5')
+            # weights_path = remote_helper.get_remote_data('https://www.flyai.com/m/v0.8|densenet121_weights_tf_dim_ordering_tf_kernels_notop.h5')
+            # 必须使用该方法下载模型，然后加载
+            # weights_path = remote_helper.get_remote_date( 'https://www.flyai.com/m/v0.8|densenet201_weights_tf_dim_ordering_tf_kernels_notop.h5')
+            # weights_path = remote_helper.get_remote_date( 'https://www.flyai.com/m/v0.8|densenet201_weights_tf_dim_ordering_tf_kernels.h5')
             # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|densenet201_weights_tf_dim_ordering_tf_kernels_notop.h5')
-            weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.7|inception_resnet_v2_weights_tf_dim_ordering_tf_kernels_notop.h5')
+            # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.7|inception_resnet_v2_weights_tf_dim_ordering_tf_kernels_notop.h5')
 
-            # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|NASNet-large-no-top.h5')
+            weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|NASNet-large-no-top.h5')
         except OSError:
             weights_path = 'imagenet'
 
 
         # base_model = ResNet50(weights=None, input_shape=(img_size[0], img_size[1], 3), include_top=False)
         # base_model = ResNet50(weights=weights_path, include_top=False ,input_shape=(img_size[0], img_size[1],3))
-        base_model = InceptionResNetV2(weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3))
+        # base_model = DenseNet201(weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3))
+        # base_model = DenseNet201(weights=weights_path, include_top=True)
         # base_model = NASNetMobile(weights=weights_path, include_top=False,input_shape=(img_size[0], img_size[1], 3))
+        base_model = NASNetLarge(weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3))
         # base_model = ResNeXt101(weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3),
         #                                 backend=keras.backend,
         #                               layers=keras.layers,
@@ -72,14 +76,16 @@ class Net():
         # for i, layer in enumerate(base_model.layers):
         #     print(i, layer.name)
         #
-        # for layer in base_model.layers[:]:
-        #     layer.trainable = False
+        for layer in base_model.layers[:]:
+            layer.trainable = False
 
         # print(layer)
 
         x = GlobalAveragePooling2D()(x)
+        # x = Dense(128, activation='relu')(x)
         # x = Flatten(name='flatten_1')(x)
-        # x = Dense(2048, activation='relu' )(x)
+        # x = Dense(1024, activation='relu' )(x)
+        x = Dense(1024, activation='relu')(x)
         predictions = Dense(num_classes, activation="softmax")(x)
         # 创建最终模型
 
