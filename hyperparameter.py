@@ -141,7 +141,7 @@ num_classes = 5
 per_train_ratio = 3
 
 # random-crop 裁剪的比例
-scale_num = 0.75
+scale_num = 0.9
 
 # 保存最佳model的精准度，比如1%的准确范围写1,若2%的保存范围写2
 save_boundary =1

@@ -1,5 +1,5 @@
 2020-3-13  
-input里resize到373*373，再裁剪中间的299*299  
+input里resize到373* 373，再裁剪中间的299*299  
 
 2020-3-12  
 ResNeXt application 居然没有？  
