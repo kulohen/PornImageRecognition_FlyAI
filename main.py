@@ -195,18 +195,18 @@ for epoch in range(train_epoch):
     '''
 
     # save best acc
-    if history_train.history['val_acc'][0] > 0.80 :
-        if round(best_score_by_acc/save_boundary, 2) < round(history_train.history['val_acc'][0] /save_boundary, 2):
+    if history_train.history['val_accuracy'][0] > 0.80 :
+        if round(best_score_by_acc/save_boundary, 2) < round(history_train.history['val_accuracy'][0] /save_boundary, 2):
             model.save_model(model=model_cnn.model_cnn, path=MODEL_PATH, overwrite=True)
-            best_score_by_acc = history_train.history['val_acc'][0]
+            best_score_by_acc = history_train.history['val_accuracy'][0]
             best_score_by_loss = history_train.history['val_loss'][0]
             best_epoch = epoch
             print('【保存了best： acc提升】')
 
-        elif round(best_score_by_acc/save_boundary, 2) == round(history_train.history['val_acc'][0] /save_boundary, 2):
+        elif round(best_score_by_acc/save_boundary, 2) == round(history_train.history['val_accuracy'][0] /save_boundary, 2):
             if round(best_score_by_loss/save_boundary, 2) >= round(history_train.history['val_loss'][0] /save_boundary, 2):
                 model.save_model(model=model_cnn.model_cnn, path=MODEL_PATH, overwrite=True)
-                best_score_by_acc = history_train.history['val_acc'][0]
+                best_score_by_acc = history_train.history['val_accuracy'][0]
                 best_score_by_loss = history_train.history['val_loss'][0]
                 best_epoch = epoch
                 print('【保存了best：acc相同，loss降低】')

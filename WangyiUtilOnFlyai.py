@@ -257,7 +257,7 @@ def get_sliceCSVbyClassify_V3(label='label',classify_count=3, split=0.8):
 def getDatasetListByClassfy_V4(classify_count=3):
     # 2019-08-29 flyai改版本了，这是为了适应
 
-    xx, yy = get_sliceCSVbyClassify_V3(classify_count=classify_count,split= 0.8)
+    xx, yy = get_sliceCSVbyClassify_V3(classify_count=classify_count,split= 0.85)
     list_tmp=[]
     for epoch in range(classify_count):
         time_0 = clock()
@@ -284,11 +284,11 @@ class historyByWangyi():
     def SetHistory(self,history_train):
 
         self.history_train_loss.append(history_train.history['loss'][0])
-        # self.history_train_acc.append(history_train.history['accuracy'][0])
-        self.history_train_acc.append(history_train.history['acc'][0])
+        self.history_train_acc.append(history_train.history['accuracy'][0])
+        # self.history_train_acc.append(history_train.history['acc'][0])
         self.history_train_val_loss.append(history_train.history['val_loss'][0])
-        # self.history_train_val_acc.append(history_train.history['val_accuracy'][0])
-        self.history_train_val_acc.append(history_train.history['val_acc'][0])
+        self.history_train_val_acc.append(history_train.history['val_accuracy'][0])
+        # self.history_train_val_acc.append(history_train.history['val_acc'][0])
         self.history_train_all['loss'] = self.history_train_loss
         self.history_train_all['accuracy'] = self.history_train_acc
         self.history_train_all['val_loss'] = self.history_train_val_loss

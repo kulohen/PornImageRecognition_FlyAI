@@ -1,7 +1,7 @@
 ## build CNN
 from keras.applications import ResNet50,VGG16,InceptionResNetV2,DenseNet121,DenseNet201,NASNetLarge,NASNetMobile
-# from keras.applications import ResNext101
-from keras_applications.resnext import ResNeXt101
+# from keras.applications.resnext import ResNeXt101
+# from keras_applications.resnext import ResNeXt101
 import keras
 from keras.layers import Input,Conv2D, MaxPool2D, Dropout, Flatten, Dense, Activation, MaxPooling2D,ZeroPadding2D,BatchNormalization,LeakyReLU,GlobalAveragePooling2D
 from keras.models import Model as keras_model
@@ -31,9 +31,9 @@ class Net():
             # weights_path = remote_helper.get_remote_date( 'https://www.flyai.com/m/v0.8|densenet201_weights_tf_dim_ordering_tf_kernels_notop.h5')
             # weights_path = remote_helper.get_remote_date( 'https://www.flyai.com/m/v0.8|densenet201_weights_tf_dim_ordering_tf_kernels.h5')
             # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|densenet201_weights_tf_dim_ordering_tf_kernels_notop.h5')
-            # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.7|inception_resnet_v2_weights_tf_dim_ordering_tf_kernels_notop.h5')
+            weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.7|inception_resnet_v2_weights_tf_dim_ordering_tf_kernels_notop.h5')
 
-            weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|NASNet-large-no-top.h5')
+            # weights_path = remote_helper.get_remote_date('https://www.flyai.com/m/v0.8|NASNet-large-no-top.h5')
         except OSError:
             weights_path = 'imagenet'
 
@@ -43,12 +43,7 @@ class Net():
         # base_model = DenseNet201(weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3))
         # base_model = DenseNet201(weights=weights_path, include_top=True)
         # base_model = NASNetMobile(weights=weights_path, include_top=False,input_shape=(img_size[0], img_size[1], 3))
-        base_model = NASNetLarge(weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3))
-        # base_model = ResNeXt101(weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3),
-        #                                 backend=keras.backend,
-        #                               layers=keras.layers,
-        #                               models=keras.models,
-        #                               utils=keras.utils)
+        base_model = InceptionResNetV2 (weights=weights_path, include_top=False, input_shape=(img_size[0], img_size[1], 3))
         Inp = Input(shape=(img_size[0], img_size[1],3))
 
         # x = Conv2D(256,3,
@@ -85,7 +80,7 @@ class Net():
         # x = Dense(128, activation='relu')(x)
         # x = Flatten(name='flatten_1')(x)
         # x = Dense(1024, activation='relu' )(x)
-        x = Dense(1024, activation='relu')(x)
+        x = Dense(1000, activation='relu')(x)
         predictions = Dense(num_classes, activation="softmax")(x)
         # 创建最终模型
 
