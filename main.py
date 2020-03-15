@@ -220,7 +220,7 @@ for epoch in range(train_epoch):
     else:
         print('当前【best】:acc:%.2f, loss:%.2f, epoch:%d' %(best_score_by_acc,best_score_by_loss,best_epoch+1) )
     # 调用系统打印日志函数，这样在线上可看到训练和校验准确率和损失的实时变化曲线
-    # train_log(train_loss=history_train.history['loss'][0], train_acc=history_train.history['acc'][0], val_loss=history_train.history['val_loss'][0], val_acc=history_train.history['val_acc'][0])
+    train_log(train_loss=history_train.history['loss'][0], train_acc=history_train.history['accuracy'][0], val_loss=history_train.history['val_loss'][0], val_acc=history_train.history['val_accuracy'][0])
 
     '''
     4/ 调整学习率和优化模型
