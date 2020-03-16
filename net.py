@@ -71,8 +71,8 @@ class Net():
         # for i, layer in enumerate(base_model.layers):
         #     print(i, layer.name)
         #
-        for layer in base_model.layers[:]:
-            layer.trainable = False
+        # for layer in base_model.layers[:]:
+        #     layer.trainable = False
 
         # print(layer)
 
@@ -80,7 +80,8 @@ class Net():
         # x = Dense(128, activation='relu')(x)
         # x = Flatten(name='flatten_1')(x)
         # x = Dense(1024, activation='relu' )(x)
-        x = Dense(1000, activation='relu')(x)
+        x = Dense(1000)(x)
+        x = LeakyReLU()(x)
         predictions = Dense(num_classes, activation="softmax")(x)
         # 创建最终模型
 
