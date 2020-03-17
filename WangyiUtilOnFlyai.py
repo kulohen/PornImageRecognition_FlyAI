@@ -177,12 +177,12 @@ class OptimizerByWangyi():
 
         elif get_loss < 0.2 and self.lr_level == 2:
             print('val loss 低于 %.1f' % 0.2)
-            tmp_opt = self.get_create_optimizer(name='adam', lr_num=1e-4)
+            tmp_opt = self.get_create_optimizer(name='adam', lr_num=3e-5)
             self.lr_level = 3
 
         elif get_loss < 0.1 and self.lr_level == 3:
             print('val loss 低于 %.1f' % 0.1)
-            tmp_opt = self.get_create_optimizer(name='sgd', lr_num=1e-5)
+            tmp_opt = self.get_create_optimizer(name='sgd', lr_num=1e-6)
             self.lr_level = 4
 
         return tmp_opt

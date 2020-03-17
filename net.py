@@ -84,7 +84,7 @@ class Net():
         # x = Dense(128)(x)
         # x = Dense(25)(x)
         # x = LeakyReLU()(x)
-        predictions = Dense(num_classes, activation="softmax" ,kernel_initializer='he_uniform')(x)
+        predictions = Dense(num_classes, activation="softmax" ,kernel_initializer='TruncatedNormal')(x)
         # 创建最终模型
 
         self.model_cnn = keras_model(inputs=Inp, outputs=predictions)
