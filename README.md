@@ -1,3 +1,11 @@
+2020-3-17  
+395* 395 效果和363* 363差不多（弱363*363 1%）  
+leakyrelu   
+dense 256  
+做个初始化kenerl_initial    
+per_train_ratio = 1.5  
+epoch=40  
+
 2020-3-13  
 input里resize到373* 373，再裁剪中间的299*299  
 采用363 * 363  

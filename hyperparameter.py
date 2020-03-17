@@ -138,7 +138,7 @@ num_classes = 5
 # 二、数据结构
 
 # 数据增强倍数
-per_train_ratio = 3
+per_train_ratio = 1.5
 
 # random-crop 裁剪的比例
 scale_num = 0.9
@@ -163,10 +163,10 @@ train_batch = args.BATCH
 
 
 # 随机学习率启动per epoch
-random_per_epoch = 30
+random_per_epoch = 20
 
 # 多岁epochs后降低学习率
-reduce_lr_per_epochs = 12
+reduce_lr_per_epochs = 6
 
 
 # 四、性能or速度

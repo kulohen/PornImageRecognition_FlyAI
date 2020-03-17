@@ -8,7 +8,7 @@ from keras.applications.densenet import preprocess_input
 from path import DATA_PATH
 
 # 输入train的size
-img_size = [395, 395]
+img_size = [363, 363]
 
 '''
 以下是crop_image_center_80percent_to_input_function的静态变量
@@ -25,11 +25,11 @@ center_scale = 0.8
 # dx = x + img_size[1]
 # dy = y + img_size[0]
 
-origin_size = [494, 494]
-x = 49
-y = 49
-dx = 444
-dy = 444
+origin_size = [454, 454]
+x = 45
+y = 45
+dx = 408
+dy = 408
 
 '''
 把样例项目中的processor.py件复制过来替换即可
