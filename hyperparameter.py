@@ -163,7 +163,7 @@ train_batch = args.BATCH
 
 
 # 随机学习率启动per epoch
-random_per_epoch = 20
+random_per_epoch = 25
 
 # 多岁epochs后降低学习率
 reduce_lr_per_epochs = 6
