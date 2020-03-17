@@ -59,8 +59,7 @@ class Net():
         #                   activation='relu',
         #                   padding='same',
         #                   name='wangyi_conv3')(x)
-        # 增加定制层
-        x = base_model(Inp)
+
         # x = base_model.output
         # x = GlobalAveragePooling2D()(x)
         # x = Flatten(name='flatten_1')(x)
@@ -70,16 +69,23 @@ class Net():
         # for i, layer in enumerate(base_model.layers):
         #     print(i, layer.name)
         #
-        # for layer in base_model.layers[:]:
-        #     layer.trainable = False
+        for layer in base_model.layers[:]:
+            layer.trainable = False
+
+
+        # 增加定制层
+        x = base_model(Inp)
 
         # print(layer)
-
+        x = Dense(2048 ,kernel_initializer='he_uniform')(x)
+        x = BatchNormalization()(x)
+        x = Dense(2048 ,kernel_initializer='he_uniform')(x)
+        x = BatchNormalization()(x)
         x = GlobalAveragePooling2D()(x)
         # x = Dense(128, activation='relu')(x)
         # x = Flatten(name='flatten_1')(x)
         # x = Dense(1024, activation='relu' )(x)
-        # x = Dense(1536 ,kernel_initializer='he_uniform')(x)
+
         # x = LeakyReLU()(x)
         # x = Dense(128)(x)
         # x = Dense(25)(x)
