@@ -79,7 +79,7 @@ class Net():
         # x = Dense(128, activation='relu')(x)
         # x = Flatten(name='flatten_1')(x)
         # x = Dense(1024, activation='relu' )(x)
-        x = Dense(256,kernel_initializer='he_uniform')(x)
+        x = Dense(2048 ,kernel_initializer='he_uniform')(x)
         x = LeakyReLU()(x)
         # x = Dense(128)(x)
         # x = Dense(25)(x)
