@@ -69,20 +69,20 @@ class Net():
         # for i, layer in enumerate(base_model.layers):
         #     print(i, layer.name)
         #
-        for layer in base_model.layers[:]:
-            layer.trainable = False
+        # for layer in base_model.layers[:]:
+        #     layer.trainable = False
 
 
         # 增加定制层
         x = base_model(Inp)
 
         # print(layer)
-        x = LeakyReLU()(x)
-        x = Dense(2048 ,kernel_initializer='he_uniform')(x)
-        x = BatchNormalization()(x)
-        x = LeakyReLU()(x)
-        x = Dense(2048 ,kernel_initializer='he_uniform')(x)
-        x = BatchNormalization()(x)
+        # x = LeakyReLU()(x)
+        # x = Dense(2048 ,kernel_initializer='he_uniform')(x)
+        # x = BatchNormalization()(x)
+        # x = LeakyReLU()(x)
+        # x = Dense(2048 ,kernel_initializer='he_uniform')(x)
+        # x = BatchNormalization()(x)
         x = GlobalAveragePooling2D()(x)
         # x = Dense(128, activation='relu')(x)
         # x = Flatten(name='flatten_1')(x)
@@ -92,7 +92,7 @@ class Net():
         # x = Dense(128)(x)
         # x = Dense(25)(x)
         # x = LeakyReLU()(x)
-        predictions = Dense(num_classes, activation="softmax" ,kernel_initializer='TruncatedNormal')(x)
+        predictions = Dense(num_classes, activation="softmax" )(x)
         # 创建最终模型
 
         self.model_cnn = keras_model(inputs=Inp, outputs=predictions)
