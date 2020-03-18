@@ -77,8 +77,10 @@ class Net():
         x = base_model(Inp)
 
         # print(layer)
+        x = LeakyReLU()(x)
         x = Dense(2048 ,kernel_initializer='he_uniform')(x)
         x = BatchNormalization()(x)
+        x = LeakyReLU()(x)
         x = Dense(2048 ,kernel_initializer='he_uniform')(x)
         x = BatchNormalization()(x)
         x = GlobalAveragePooling2D()(x)
